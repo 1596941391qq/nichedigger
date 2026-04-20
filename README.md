@@ -28,15 +28,17 @@ Nichedigger:  "best vibrator" → 47 Reddit threads, 23 buying signals,
               pain: "too loud for roommates" → P0, write best-of guide
 ```
 
-## Screenshot
+## Screenshots
 
-![Nichedigger Dashboard](docs/dashboard.png)
+![Dashboard - How It Works](docs/dashboard-top.png)
+
+![Dashboard - Keywords & Signals](docs/dashboard-bottom.png)
 
 ## Features
 
 - **18 Intent Types** — From competitor interception (95) to educational (35), every keyword gets a precise commercial intent score
 - **Reddit Deep Mining** — Direct JSON API with rate limiting. Buying signals, pain points, competitor mentions extracted from real posts
-- **LLM-Powered Research Loop** — GLM-4-flash generates targeted Reddit search queries, iterates 3 rounds, each round deciding the next angle
+- **LLM-Powered Research Loop** — Any OpenAI-compatible LLM generates targeted Reddit search queries, iterates 3 rounds, each round deciding the next angle
 - **Relevance Filtering** — Token-overlap gate kills false positives. No more nuclear fusion when searching for vibrators
 - **KD-Aware Priority** — P0/P1/P2/P3 ranking with keyword difficulty baked in. KD > 60 can never be P0
 - **Brand Fitness Scoring** — Each keyword scored against your brand positioning
@@ -54,7 +56,7 @@ export HTTPS_PROXY=http://127.0.0.1:7892
 node cli.mjs --keywords "best vibrator,quiet vibrator,vibrator for couples" --brand arousen
 
 # With LLM deep research (recommended)
-export LLM_API_KEY=your_glm_key
+export LLM_API_KEY=your_api_key
 node cli.mjs --keywords "best vibrator,quiet vibrator" --brand arousen --iterations 3
 
 # Web dashboard mode
@@ -154,11 +156,12 @@ nichedigger/
 │   ├── intent-taxonomy.mjs    18 intents + brand fitness + KD ranking
 │   ├── source-adapters.mjs    Reddit API + rate limit + relevance filter
 │   ├── research-loop.mjs      LLM iterative research (3 rounds)
-│   ├── llm-adapter.mjs        GLM-4-flash (OpenAI-compatible)
+│   ├── llm-adapter.mjs        LLM adapter (OpenAI-compatible)
 │   ├── content-extractor.mjs  HTML → text extraction
 │   └── report-writer.mjs      JSON + CSV + Markdown output
 └── docs/
-    └── dashboard.png          Screenshot
+    ├── dashboard-top.png      Screenshot (How It Works)
+    └── dashboard-bottom.png   Screenshot (Keywords & Signals)
 ```
 
 ## Environment Variables
@@ -166,8 +169,8 @@ nichedigger/
 | Variable | Required | Default | Description |
 |----------|----------|---------|-------------|
 | `HTTPS_PROXY` | China | — | Proxy for Reddit API |
-| `LLM_API_KEY` | Optional | — | Enables LLM deep research |
-| `LLM_BASE_URL` | No | `https://open.bigmodel.cn/api/paas/v4` | Any OpenAI-compatible endpoint |
+| `LLM_API_KEY` | Optional | — | Any OpenAI-compatible API key |
+| `LLM_BASE_URL` | No | — | Custom LLM endpoint |
 | `LLM_MODEL` | No | `glm-4-flash` | Model name |
 
 ## Star History
@@ -178,25 +181,33 @@ nichedigger/
 
 ## 中文说明
 
-### 这是什么？
+### 别猜了，直接挖
 
-Nichedigger 是 Reddit 驱动的关键词挖掘工具，专为 PSEO（程序化 SEO）设计。
-
-传统工具只告诉你搜索量和难度。Nichedigger 告诉你**为什么**有人搜这个词。
+传统关键词工具只给搜索量和难度。**Nichedigger 告诉你为什么有人搜这个词。**
 
 它从 Reddit 真人对话中提取购买信号、痛点和竞品提及，然后按商业意图 + 实时信号 + KD 难度排序，输出优先级关键词列表。
 
-### 工作原理
+```
+传统工具: "best vibrator" → 搜索量: 12100, KD: 72 → 接下来呢？
+Nichedigger: "best vibrator" → 47条Reddit讨论, 23个购买信号,
+             痛点: "室友能听到" → P0优先级, 建议写best-of指南
+```
 
-```
-关键词列表 → 18种意图打分 → LLM生成Reddit搜索词 → Reddit三轮迭代挖掘
-                                                      ↓
-                                              相关性过滤（token重叠<30%归零）
-                                                      ↓
-                                              P0-P3优先级排序（KD>60不能P0）
-                                                      ↓
-                                              报告 + CSV + Web看板
-```
+### 截图
+
+![看板 - How It Works](docs/dashboard-top.png)
+
+![看板 - 关键词 & 信号](docs/dashboard-bottom.png)
+
+### 核心特性
+
+- **18种意图分类** — 从竞品拦截(95分)到教育科普(35分)，每个词精确打分
+- **Reddit深度挖掘** — 直接JSON API，带限速保护。提取购买信号、痛点、竞品提及
+- **LLM研究循环** — 支持任何OpenAI兼容API，3轮迭代，每轮LLM决定下一个挖掘角度
+- **相关性过滤** — token重叠<30%的帖子信号归零，杜绝"搜振动棒出核聚变"
+- **KD感知排序** — KD>60不能P0，KD>80不能P1
+- **品牌适配度** — 每个词按品牌定位打分，"lovense review"对非Lovense品牌=低适配
+- **零SEO工具依赖** — 纯Reddit数据，不需要任何付费订阅
 
 ### 30秒上手
 
@@ -209,40 +220,100 @@ export HTTPS_PROXY=http://127.0.0.1:7892
 node cli.mjs --keywords "best vibrator,quiet vibrator" --brand arousen
 
 # 开LLM深度研究（推荐）
-export LLM_API_KEY=你的智谱key
-node cli.mjs --keywords "best vibrator,quiet vibrator" --brand arousen
+export LLM_API_KEY=你的API_key
+node cli.mjs --keywords "best vibrator,quiet vibrator" --brand arousen --iterations 3
 
 # Web看板模式
 node server.mjs  # http://127.0.0.1:4318
 ```
 
-### 核心特性
+### 工作原理
 
-- **18种意图分类** — 从竞品拦截(95分)到教育科普(35分)，每个词精确打分
-- **Reddit深度挖掘** — 直接JSON API，带限速保护。提取购买信号、痛点、竞品提及
-- **LLM研究循环** — GLM-4-flash生成定向搜索词，3轮迭代，每轮LLM决定下一个角度
-- **相关性过滤** — token重叠<30%的帖子信号归零，杜绝"搜振动棒出核聚变"
-- **KD感知排序** — KD>60不能P0，KD>80不能P1
-- **品牌适配度** — 每个词按品牌定位打分，"lovense review"对非Lovense品牌=低适配
+```
+┌─────────────┐     ┌──────────────────┐     ┌─────────────────┐
+│  关键词列表   │────▶│  18种意图打分     │────▶│  LLM生成搜索词   │
+│  (CSV/文本)  │     │  +品牌适配度      │     │  (Reddit优化)    │
+└─────────────┘     └──────────────────┘     └────────┬────────┘
+                                                       │
+              ┌────────────────────────────────────────┘
+              ▼
+┌──────────────────┐     ┌──────────────────┐     ┌─────────────────┐
+│  Reddit挖掘      │────▶│  相关性过滤       │────▶│  优先级排序      │
+│  (3轮迭代)       │     │  (token重叠检测)  │     │  (P0-P3)        │
+│  购买信号        │     │  <30% = 信号归零  │     │  KD惩罚         │
+│  痛点            │     └──────────────────┘     │  品牌适配        │
+│  竞品提及        │                               └────────┬────────┘
+└──────────────────┘                                         │
+                                                             ▼
+                                               ┌──────────────────┐
+                                               │  报告 + CSV +    │
+                                               │  Web看板         │
+                                               └──────────────────┘
+```
 
 ### 优先级公式
 
 ```
 总分 = 商业意图 × 0.45 + Reddit实时信号 × 0.25 + 搜索量 × 0.20 + KD惩罚 × 0.10
 
-P0: 总分≥80 且 KD≤60
-P1: 总分≥60 且 KD≤80
-P2: 总分≥40
-P3: <40
+硬限制: KD > 60 → 最高P1 | KD > 80 → 最高P2
+```
+
+### 18种意图分类
+
+| 意图类型 | 权重 | 漏斗位置 | 捕获的搜索词 |
+|----------|------|----------|-------------|
+| 竞品拦截 | 95 | 底部 | "X vs Y"、"alternative to" |
+| 交易决策 | 92 | 底部 | "buy"、"price"、"discount" |
+| 评测判断 | 90 | 底部 | "review"、"worth it"、"legit" |
+| 品牌防御 | 88 | 底部 | 品牌名提及 |
+| 商业调查 | 82 | 中部 | "best X"、"top rated" |
+| 对比选购 | 80 | 中部 | "compare"、"different" |
+| 替代品搜索 | 78 | 中部 | "similar to"、"instead of" |
+| 功能型商业 | 75 | 中部 | "quiet"、"waterproof"、"app-controlled" |
+| 复购升级 | 70 | 购后 | "upgrade"、"premium" |
+| 顾虑消除 | 65 | 中部 | "safe?"、"side effects" |
+| UGC痛点 | 62 | 中部 | "disappointed"、"broke" |
+| 场景需求 | 60 | 顶部 | "for travel"、"for apartment" |
+| 隐性需求 | 58 | 顶部 | "wish there was"、"cannot find" |
+| 热点趋势 | 55 | 顶部 | "viral"、"2025"、"tiktok" |
+| 问题解决 | 55 | 顶部 | "how to"、"fix" |
+| 使用教程 | 50 | 顶部 | "how to use"、"tutorial" |
+| 购后支持 | 45 | 购后 | "how to clean"、"not working" |
+| 教育科普 | 35 | 顶部 | "what is"、"guide" |
+
+### CLI 参数
+
+```
+node cli.mjs [选项]
+
+  --keywords <字符串>   逗号分隔关键词或CSV路径（必填）
+  --brand <品牌>        品牌slug，用于适配度打分（默认: generic）
+  --output <目录>       输出目录（默认: ./output）
+  --limit <数字>        最大关键词数（默认: 30）
+  --iterations <数字>   LLM研究轮数（默认: 3）
+  --dry-run             只打印结果，不写文件
+```
+
+### API 服务
+
+```
+node server.mjs  （默认端口: 4318）
+
+GET  /api/health                 健康检查
+GET  /api/report?brand=arousen   获取最新报告
+POST /api/run                    执行挖掘 {brand, keywords}
+POST /api/site-sync              同步到静态站点
 ```
 
 ### 环境变量
 
-| 变量 | 必需 | 说明 |
-|------|------|------|
-| `HTTPS_PROXY` | 国内必需 | 访问Reddit的代理 |
-| `LLM_API_KEY` | 可选 | 开启LLM深度研究（支持智谱/任何OpenAI兼容API） |
-| `LLM_MODEL` | 可选 | 默认 `glm-4-flash` |
+| 变量 | 必需 | 默认值 | 说明 |
+|------|------|--------|------|
+| `HTTPS_PROXY` | 国内必需 | — | 访问Reddit的代理 |
+| `LLM_API_KEY` | 可选 | — | 任何OpenAI兼容API的密钥 |
+| `LLM_BASE_URL` | 可选 | — | 自定义LLM端点 |
+| `LLM_MODEL` | 可选 | `glm-4-flash` | 模型名 |
 
 ---
 
