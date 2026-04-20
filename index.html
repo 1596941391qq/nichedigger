@@ -95,7 +95,7 @@
       <h3>Configuration</h3>
       <div class="config-grid">
         <div><label>Brand</label><select id="brandSelect"><option value="arousen">arousen</option><option value="302ai">302ai</option><option value="pinkpunch">pinkpunch</option><option value="hakkoai">hakkoai</option><option value="leewow">leewow</option></select></div>
-        <div><label>Data Path</label><input id="dataPathInput" value="data/intent-workbench/arousen/intent-workbench-dashboard.json"></div>
+        <div><label>Data Path</label><input id="dataPathInput" value="data/sample/intent-workbench-dashboard.json"></div>
       </div>
       <div class="toolbar"><button class="btn btn-primary" id="loadBtn">Load Dashboard</button><button class="btn btn-secondary" onclick="window.open(document.getElementById('dataPathInput').value)">Open Raw JSON</button></div>
       <div id="status">Ready.</div>
@@ -116,6 +116,7 @@ function renderSignals(d){const signals=d.liveSignals||[];if(!signals.length){$(
 function renderLLM(d){const lr=d.llmResearch;if(!lr||!lr.available){$('llmCard').style.display='none';return}$('llmCard').style.display='';$('llmStatus').textContent=`Iterations: ${lr.iterations||0}`;if(lr.classification){const c=lr.classification;$('llmQueries').innerHTML=`<span class="pill pill-accent">${c.primaryIntent||'?'}</span>`+(c.searchQueries||[]).map(q=>`<span class="pill">${q}</span>`).join('')}const facts=lr.extractedFacts||[];$('llmFacts').innerHTML=facts.length?facts.map(f=>`<div class="llm-fact"><span class="type">${f.type||'fact'}</span><p style="margin-top:4px;">${f.fact||''}</p></div>`).join(''):'<p class="muted">No facts extracted.</p>'}
 $('loadBtn').addEventListener('click',loadDashboard);
 $('brandSelect').addEventListener('change',()=>{$('dataPathInput').value=`data/intent-workbench/${$('brandSelect').value}/intent-workbench-dashboard.json`});
+loadDashboard();
 </script>
 </body>
 </html>

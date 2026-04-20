@@ -1,0 +1,865 @@
+{
+  "brand": "arousen",
+  "website": "https://arousen.com",
+  "generatedAt": "2026-04-20T19:39:23.780Z",
+  "taxonomyVersion": 2,
+  "llmEnabled": true,
+  "summary": {
+    "keywordCount": 10,
+    "liveQueryCount": 8,
+    "highPriorityCount": 10,
+    "notRecommendedCount": 1
+  },
+  "intentDistribution": [
+    {
+      "intentLabel": "商业调查",
+      "count": 6
+    },
+    {
+      "intentLabel": "功能型商业词",
+      "count": 2
+    },
+    {
+      "intentLabel": "问题解决",
+      "count": 1
+    },
+    {
+      "intentLabel": "评测判断",
+      "count": 1
+    }
+  ],
+  "funnelDistribution": [
+    {
+      "funnel": "mid",
+      "count": 8
+    },
+    {
+      "funnel": "top",
+      "count": 1
+    },
+    {
+      "funnel": "bottom",
+      "count": 1
+    }
+  ],
+  "topOpportunities": [
+    {
+      "keyword": "best vibrator for couples",
+      "priority": "P0",
+      "intent": "商业调查",
+      "secondaryIntents": [],
+      "funnel": "mid",
+      "conversionDistance": "mid",
+      "commercialScore": 88,
+      "liveSignalScore": 100,
+      "semrushVolume": 590,
+      "brandFitness": "medium",
+      "contentFormat": "bestof_page",
+      "strategyLine": "neutral_review"
+    },
+    {
+      "keyword": "best vibrators",
+      "priority": "P0",
+      "intent": "商业调查",
+      "secondaryIntents": [],
+      "funnel": "mid",
+      "conversionDistance": "mid",
+      "commercialScore": 85,
+      "liveSignalScore": 100,
+      "semrushVolume": 12100,
+      "brandFitness": "medium",
+      "contentFormat": "bestof_page",
+      "strategyLine": "neutral_review"
+    },
+    {
+      "keyword": "best rabbit vibrators",
+      "priority": "P0",
+      "intent": "商业调查",
+      "secondaryIntents": [
+        "功能型商业词"
+      ],
+      "funnel": "mid",
+      "conversionDistance": "mid",
+      "commercialScore": 85,
+      "liveSignalScore": 100,
+      "semrushVolume": 720,
+      "brandFitness": "medium",
+      "contentFormat": "bestof_page",
+      "strategyLine": "neutral_review"
+    },
+    {
+      "keyword": "best bullet vibrators",
+      "priority": "P0",
+      "intent": "商业调查",
+      "secondaryIntents": [
+        "功能型商业词"
+      ],
+      "funnel": "mid",
+      "conversionDistance": "mid",
+      "commercialScore": 85,
+      "liveSignalScore": 100,
+      "semrushVolume": 590,
+      "brandFitness": "medium",
+      "contentFormat": "bestof_page",
+      "strategyLine": "neutral_review"
+    },
+    {
+      "keyword": "best wand vibrators",
+      "priority": "P0",
+      "intent": "商业调查",
+      "secondaryIntents": [],
+      "funnel": "mid",
+      "conversionDistance": "mid",
+      "commercialScore": 85,
+      "liveSignalScore": 100,
+      "semrushVolume": 480,
+      "brandFitness": "medium",
+      "contentFormat": "bestof_page",
+      "strategyLine": "neutral_review"
+    },
+    {
+      "keyword": "best g spot vibrators",
+      "priority": "P0",
+      "intent": "商业调查",
+      "secondaryIntents": [
+        "功能型商业词"
+      ],
+      "funnel": "mid",
+      "conversionDistance": "mid",
+      "commercialScore": 85,
+      "liveSignalScore": 100,
+      "semrushVolume": 390,
+      "brandFitness": "medium",
+      "contentFormat": "bestof_page",
+      "strategyLine": "neutral_review"
+    },
+    {
+      "keyword": "lovense review",
+      "priority": "P1",
+      "intent": "评测判断",
+      "secondaryIntents": [
+        "品牌防御"
+      ],
+      "funnel": "bottom",
+      "conversionDistance": "near",
+      "commercialScore": 93,
+      "liveSignalScore": 22,
+      "semrushVolume": 320,
+      "brandFitness": "low",
+      "contentFormat": "review_page",
+      "strategyLine": "neutral_review"
+    },
+    {
+      "keyword": "remote control vibrators",
+      "priority": "P1",
+      "intent": "功能型商业词",
+      "secondaryIntents": [],
+      "funnel": "mid",
+      "conversionDistance": "mid",
+      "commercialScore": 78,
+      "liveSignalScore": 50,
+      "semrushVolume": 1300,
+      "brandFitness": "medium",
+      "contentFormat": "category_page",
+      "strategyLine": "category_capture"
+    },
+    {
+      "keyword": "discreet vibrators",
+      "priority": "P1",
+      "intent": "功能型商业词",
+      "secondaryIntents": [
+        "场景需求"
+      ],
+      "funnel": "mid",
+      "conversionDistance": "mid",
+      "commercialScore": 78,
+      "liveSignalScore": 50,
+      "semrushVolume": 720,
+      "brandFitness": "medium",
+      "contentFormat": "category_page",
+      "strategyLine": "category_capture"
+    },
+    {
+      "keyword": "how to use a vibrator",
+      "priority": "P1",
+      "intent": "问题解决",
+      "secondaryIntents": [
+        "使用教程"
+      ],
+      "funnel": "top",
+      "conversionDistance": "mid-far",
+      "commercialScore": 58,
+      "liveSignalScore": 100,
+      "semrushVolume": 5400,
+      "brandFitness": "medium",
+      "contentFormat": "guide_page",
+      "strategyLine": "education_research"
+    }
+  ],
+  "notRecommended": [
+    {
+      "keyword": "lovense review",
+      "intent": "评测判断",
+      "brandFitness": "low",
+      "commercialScore": 93,
+      "reason": "low_brand_fitness"
+    }
+  ],
+  "llmResearch": {
+    "available": true,
+    "classification": {
+      "primaryIntent": "review",
+      "searchQueries": [
+        "lovense product review",
+        "pros and cons of lovense",
+        "real user reviews of lovense"
+      ]
+    },
+    "iterations": 3,
+    "extractedFacts": []
+  },
+  "liveSignals": [
+    {
+      "query": "lovense product review",
+      "liveSignalScore": 33,
+      "reddit": {
+        "count": 8,
+        "ok": true,
+        "error": "",
+        "mode": "direct_api",
+        "stats": {
+          "totalPosts": 5,
+          "avgScore": 1984,
+          "maxScore": 5143,
+          "avgComments": 0,
+          "subreddits": [
+            "Python",
+            "SideProject",
+            "television",
+            "SquaredCircle",
+            "science"
+          ],
+          "totalBuyingSignals": 0,
+          "totalPainPoints": 0,
+          "competitors": []
+        },
+        "topDiscussions": [
+          {
+            "title": "[Showcase] I over-engineered a Python SDK for Lovense devices (Async, Pydantic)",
+            "subreddit": "Python",
+            "score": 9,
+            "numComments": 0,
+            "link": "https://reddit.com/r/Python/comments/1rz7620/showcase_i_overengineered_a_python_sdk_for/",
+            "painPoints": [
+              "battery_issue",
+              "discretion_issue"
+            ],
+            "buyingSignals": [],
+            "competitors": [
+              "lovense"
+            ]
+          },
+          {
+            "title": "6 months, 40 downloads, 0 in revenue. Apple matched my gift app's ads to \"pickle\" and an adult toy brand. I have screenshots.",
+            "subreddit": "SideProject",
+            "score": 1,
+            "numComments": 0,
+            "link": "https://reddit.com/r/SideProject/comments/1s0n7qv/6_months_40_downloads_0_in_revenue_apple_matched/",
+            "painPoints": [],
+            "buyingSignals": [
+              "gift_intent"
+            ],
+            "competitors": [
+              "lovense"
+            ]
+          },
+          {
+            "title": "[IGN; 9/10] Netflix's 'One Piece' Season 2 Review: With grand production design, exquisite costuming, and stunning VFX work, and the most adorable reindeer doctor, this live-action manga adaptation is nothing short of a miracle",
+            "subreddit": "television",
+            "score": 2846,
+            "numComments": 0,
+            "link": "https://reddit.com/r/television/comments/1rpuc7v/ign_910_netflixs_one_piece_season_2_review_with/",
+            "painPoints": [],
+            "buyingSignals": [],
+            "competitors": []
+          },
+          {
+            "title": "[WON] There is belief among those in WWE that after all the hype, Wrestlepalooza was a failure for a first show on ESPN. Paul Levesque reacted to the negative reviews on Wrestlepalooza during a production meeting, saying, “We work them (the fans). They don’t work us.\"",
+            "subreddit": "SquaredCircle",
+            "score": 1923,
+            "numComments": 0,
+            "link": "https://reddit.com/r/SquaredCircle/comments/1o93nt4/won_there_is_belief_among_those_in_wwe_that_after/",
+            "painPoints": [],
+            "buyingSignals": [],
+            "competitors": []
+          },
+          {
+            "title": "World in $1.5tn ‘plastics crisis’ hitting health from infancy to old age, report warns. Plastic production has increased more than 200 times since 1950 and hits health at every stage from extraction to disposal, says review in the Lancet.",
+            "subreddit": "science",
+            "score": 5143,
+            "numComments": 0,
+            "link": "https://reddit.com/r/science/comments/1mh52gm/world_in_15tn_plastics_crisis_hitting_health_from/",
+            "painPoints": [],
+            "buyingSignals": [],
+            "competitors": []
+          }
+        ]
+      }
+    },
+    {
+      "query": "pros and cons of lovense",
+      "liveSignalScore": 8,
+      "reddit": {
+        "count": 1,
+        "ok": true,
+        "error": "",
+        "mode": "direct_api",
+        "stats": {
+          "totalPosts": 1,
+          "avgScore": 0,
+          "maxScore": 0,
+          "avgComments": 0,
+          "subreddits": [
+            "CamGirlProblems"
+          ],
+          "totalBuyingSignals": 0,
+          "totalPainPoints": 0,
+          "competitors": []
+        },
+        "topDiscussions": [
+          {
+            "title": "MultiStreaming questions",
+            "subreddit": "CamGirlProblems",
+            "score": 0,
+            "numComments": 0,
+            "link": "https://reddit.com/r/CamGirlProblems/comments/1n36rm0/multistreaming_questions/",
+            "painPoints": [],
+            "buyingSignals": [
+              "considering"
+            ],
+            "competitors": [
+              "lovense"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "query": "real user reviews of lovense",
+      "liveSignalScore": 89,
+      "reddit": {
+        "count": 8,
+        "ok": true,
+        "error": "",
+        "mode": "direct_api",
+        "stats": {
+          "totalPosts": 5,
+          "avgScore": 8609,
+          "maxScore": 14997,
+          "avgComments": 0,
+          "subreddits": [
+            "ultrawidemasterrace",
+            "Fauxmoi",
+            "selfhosted",
+            "linux",
+            "SubredditDrama"
+          ],
+          "totalBuyingSignals": 0,
+          "totalPainPoints": 0,
+          "competitors": []
+        },
+        "topDiscussions": [
+          {
+            "title": "[Real-User Invite] LG UltraGear 5K2K GX9: The Ultimate Sweet Spot of UltraWide OLED Gaming Monitor",
+            "subreddit": "ultrawidemasterrace",
+            "score": 817,
+            "numComments": 0,
+            "link": "https://reddit.com/r/ultrawidemasterrace/comments/1k48jzt/realuser_invite_lg_ultragear_5k2k_gx9_the/",
+            "painPoints": [],
+            "buyingSignals": [
+              "considering"
+            ],
+            "competitors": []
+          },
+          {
+            "title": "A Redditor Criticized ICE. Trump Is Trying to Unmask Them by Dragging the Company to a Secret Grand Jury.",
+            "subreddit": "Fauxmoi",
+            "score": 12368,
+            "numComments": 0,
+            "link": "https://reddit.com/r/Fauxmoi/comments/1shj6zn/a_redditor_criticized_ice_trump_is_trying_to/",
+            "painPoints": [
+              "buyer_remorse"
+            ],
+            "buyingSignals": [
+              "purchase_mention",
+              "comparison_shopping"
+            ],
+            "competitors": []
+          },
+          {
+            "title": "Huntarr - Your passwords and your entire arr stack's API keys are exposed to anyone on your network, or worse, the internet.",
+            "subreddit": "selfhosted",
+            "score": 9586,
+            "numComments": 0,
+            "link": "https://reddit.com/r/selfhosted/comments/1rckopd/huntarr_your_passwords_and_your_entire_arr_stacks/",
+            "painPoints": [
+              "buyer_remorse"
+            ],
+            "buyingSignals": [
+              "price_sensitivity"
+            ],
+            "competitors": []
+          },
+          {
+            "title": "I traced $2 billion in nonprofit grants and 45 states of lobbying records to figure out who's behind the age verification bills. The answer involves a company that profits from your data writing laws that collect more of it.",
+            "subreddit": "linux",
+            "score": 14997,
+            "numComments": 0,
+            "link": "https://reddit.com/r/linux/comments/1rshc1f/i_traced_2_billion_in_nonprofit_grants_and_45/",
+            "painPoints": [
+              "usability_issue"
+            ],
+            "buyingSignals": [
+              "considering",
+              "comparison_shopping"
+            ],
+            "competitors": []
+          },
+          {
+            "title": "things go nuclear in r/falloutmemes when a mod removes a meme, deeming anything transgender as “political”",
+            "subreddit": "SubredditDrama",
+            "score": 5279,
+            "numComments": 0,
+            "link": "https://reddit.com/r/SubredditDrama/comments/1rivlpn/things_go_nuclear_in_rfalloutmemes_when_a_mod/",
+            "painPoints": [
+              "usability_issue"
+            ],
+            "buyingSignals": [],
+            "competitors": []
+          }
+        ]
+      }
+    },
+    {
+      "query": "lovense review -buying_signals -pain_points",
+      "liveSignalScore": 55,
+      "reddit": {
+        "count": 8,
+        "ok": true,
+        "error": "",
+        "mode": "direct_api",
+        "stats": {
+          "totalPosts": 5,
+          "avgScore": 4,
+          "maxScore": 8,
+          "avgComments": 0,
+          "subreddits": [
+            "CamGirlProblems",
+            "Python",
+            "SideProject"
+          ],
+          "totalBuyingSignals": 0,
+          "totalPainPoints": 0,
+          "competitors": []
+        },
+        "topDiscussions": [
+          {
+            "title": "Lovense mini/portable fuck machine reviews??",
+            "subreddit": "CamGirlProblems",
+            "score": 2,
+            "numComments": 0,
+            "link": "https://reddit.com/r/CamGirlProblems/comments/1q1vxjy/lovense_miniportable_fuck_machine_reviews/",
+            "painPoints": [],
+            "buyingSignals": [],
+            "competitors": [
+              "lovense"
+            ]
+          },
+          {
+            "title": "[Showcase] I over-engineered a Python SDK for Lovense devices (Async, Pydantic)",
+            "subreddit": "Python",
+            "score": 8,
+            "numComments": 0,
+            "link": "https://reddit.com/r/Python/comments/1rz7620/showcase_i_overengineered_a_python_sdk_for/",
+            "painPoints": [
+              "battery_issue",
+              "discretion_issue"
+            ],
+            "buyingSignals": [],
+            "competitors": [
+              "lovense"
+            ]
+          },
+          {
+            "title": "Advice please!!",
+            "subreddit": "CamGirlProblems",
+            "score": 6,
+            "numComments": 0,
+            "link": "https://reddit.com/r/CamGirlProblems/comments/1s44eu1/advice_please/",
+            "painPoints": [],
+            "buyingSignals": [
+              "seeking_recommendation",
+              "price_sensitivity"
+            ],
+            "competitors": [
+              "lovense"
+            ]
+          },
+          {
+            "title": "6 months, 40 downloads, 0 in revenue. Apple matched my gift app's ads to \"pickle\" and an adult toy brand. I have screenshots.",
+            "subreddit": "SideProject",
+            "score": 1,
+            "numComments": 0,
+            "link": "https://reddit.com/r/SideProject/comments/1s0n7qv/6_months_40_downloads_0_in_revenue_apple_matched/",
+            "painPoints": [],
+            "buyingSignals": [
+              "gift_intent"
+            ],
+            "competitors": [
+              "lovense"
+            ]
+          },
+          {
+            "title": "interactive toys recommendations",
+            "subreddit": "CamGirlProblems",
+            "score": 3,
+            "numComments": 0,
+            "link": "https://reddit.com/r/CamGirlProblems/comments/1skg5ok/interactive_toys_recommendations/",
+            "painPoints": [],
+            "buyingSignals": [],
+            "competitors": []
+          }
+        ]
+      }
+    },
+    {
+      "query": "https://www.reddit.com/r/Python/comments/10x5z0q/showcase_i_over_engineered_a_python_sdk_for_lovense_devices/",
+      "liveSignalScore": 0,
+      "reddit": {
+        "count": 0,
+        "ok": false,
+        "error": "",
+        "mode": "research_loop",
+        "stats": {
+          "totalPosts": 0,
+          "avgScore": 0,
+          "maxScore": 0,
+          "avgComments": 0,
+          "subreddits": [],
+          "totalBuyingSignals": 0,
+          "totalPainPoints": 0,
+          "competitors": []
+        },
+        "topDiscussions": []
+      }
+    },
+    {
+      "query": "best vibrator for couples",
+      "liveSignalScore": 100,
+      "reddit": {
+        "count": 5,
+        "ok": true,
+        "error": "",
+        "mode": "direct_api",
+        "stats": {
+          "totalPosts": 5,
+          "avgScore": 1494,
+          "maxScore": 4147,
+          "avgComments": 319,
+          "subreddits": [
+            "Marriage",
+            "ldssexuality",
+            "BestofRedditorUpdates",
+            "NevilleGoddard"
+          ],
+          "totalBuyingSignals": 15,
+          "totalPainPoints": 8,
+          "competitors": []
+        },
+        "topDiscussions": [
+          {
+            "title": "What’s the best couple vibrators for newbies? Seeking tips from experienced couples",
+            "subreddit": "Marriage",
+            "score": 9,
+            "numComments": 22,
+            "link": "https://reddit.com/r/Marriage/comments/1r3cyhi/whats_the_best_couple_vibrators_for_newbies/",
+            "painPoints": [
+              "usability_issue"
+            ],
+            "buyingSignals": [
+              "purchase_mention",
+              "considering",
+              "gift_intent"
+            ],
+            "competitors": []
+          },
+          {
+            "title": "Best vibrator for newly weds",
+            "subreddit": "ldssexuality",
+            "score": 30,
+            "numComments": 37,
+            "link": "https://reddit.com/r/ldssexuality/comments/1o8lxvh/best_vibrator_for_newly_weds/",
+            "painPoints": [],
+            "buyingSignals": [
+              "purchase_mention",
+              "gift_intent"
+            ],
+            "competitors": []
+          },
+          {
+            "title": "[New Update]: I think my sister just ruined our dad’s engagement to an amazing woman, and I hate her so much",
+            "subreddit": "BestofRedditorUpdates",
+            "score": 4147,
+            "numComments": 786,
+            "link": "https://reddit.com/r/BestofRedditorUpdates/comments/1sdod7o/new_update_i_think_my_sister_just_ruined_our_dads/",
+            "painPoints": [
+              "buyer_remorse",
+              "quality_issue",
+              "usability_issue"
+            ],
+            "buyingSignals": [
+              "purchase_mention",
+              "considering",
+              "seeking_recommendation",
+              "comparison_shopping"
+            ],
+            "competitors": []
+          },
+          {
+            "title": "AITA for changing Christmas plans with a newborn over a guest being unvaccinated?",
+            "subreddit": "BestofRedditorUpdates",
+            "score": 1941,
+            "numComments": 382,
+            "link": "https://reddit.com/r/BestofRedditorUpdates/comments/1r60ipe/aita_for_changing_christmas_plans_with_a_newborn/",
+            "painPoints": [
+              "fit_comfort",
+              "trust_issue",
+              "usability_issue"
+            ],
+            "buyingSignals": [
+              "seeking_recommendation",
+              "value_assessment",
+              "price_sensitivity",
+              "gift_intent"
+            ],
+            "competitors": []
+          },
+          {
+            "title": "A year in review - Everything changed.",
+            "subreddit": "NevilleGoddard",
+            "score": 1344,
+            "numComments": 368,
+            "link": "https://reddit.com/r/NevilleGoddard/comments/1rffx3y/a_year_in_review_everything_changed/",
+            "painPoints": [
+              "trust_issue"
+            ],
+            "buyingSignals": [
+              "value_assessment",
+              "gift_intent"
+            ],
+            "competitors": []
+          }
+        ]
+      }
+    },
+    {
+      "query": "best vibrators",
+      "liveSignalScore": 100,
+      "reddit": {
+        "count": 5,
+        "ok": true,
+        "error": "",
+        "mode": "direct_api",
+        "stats": {
+          "totalPosts": 5,
+          "avgScore": 5113,
+          "maxScore": 10034,
+          "avgComments": 525,
+          "subreddits": [
+            "TwoXChromosomes",
+            "sexeducation",
+            "Construction",
+            "formula1",
+            "BestofRedditorUpdates"
+          ],
+          "totalBuyingSignals": 7,
+          "totalPainPoints": 8,
+          "competitors": []
+        },
+        "topDiscussions": [
+          {
+            "title": "Best vibrator",
+            "subreddit": "TwoXChromosomes",
+            "score": 0,
+            "numComments": 17,
+            "link": "https://reddit.com/r/TwoXChromosomes/comments/1q7x4ix/best_vibrator/",
+            "painPoints": [],
+            "buyingSignals": [],
+            "competitors": []
+          },
+          {
+            "title": "What’s the best vibrator for beginners?",
+            "subreddit": "sexeducation",
+            "score": 2,
+            "numComments": 10,
+            "link": "https://reddit.com/r/sexeducation/comments/1rl603l/whats_the_best_vibrator_for_beginners/",
+            "painPoints": [],
+            "buyingSignals": [
+              "purchase_mention",
+              "considering",
+              "seeking_recommendation"
+            ],
+            "competitors": []
+          },
+          {
+            "title": "Looking for the best “anti-vibration” gloves. Any recommendations?",
+            "subreddit": "Construction",
+            "score": 1494,
+            "numComments": 651,
+            "link": "https://reddit.com/r/Construction/comments/1rzd0nr/looking_for_the_best_antivibration_gloves_any/",
+            "painPoints": [],
+            "buyingSignals": [
+              "seeking_recommendation"
+            ],
+            "competitors": []
+          },
+          {
+            "title": "Newey's Caught You All Sleeping.",
+            "subreddit": "formula1",
+            "score": 10034,
+            "numComments": 1066,
+            "link": "https://reddit.com/r/formula1/comments/1rnlcig/neweys_caught_you_all_sleeping/",
+            "painPoints": [
+              "fit_comfort",
+              "battery_issue",
+              "usability_issue",
+              "discretion_issue"
+            ],
+            "buyingSignals": [
+              "comparison_shopping",
+              "price_sensitivity"
+            ],
+            "competitors": []
+          },
+          {
+            "title": "my (23f) boyfriend (24m) keeps accidentally calling me his best friends name during sex",
+            "subreddit": "BestofRedditorUpdates",
+            "score": 8922,
+            "numComments": 882,
+            "link": "https://reddit.com/r/BestofRedditorUpdates/comments/1s3drt0/my_23f_boyfriend_24m_keeps_accidentally_calling/",
+            "painPoints": [
+              "buyer_remorse",
+              "quality_issue",
+              "fit_comfort",
+              "discretion_issue"
+            ],
+            "buyingSignals": [
+              "gift_intent"
+            ],
+            "competitors": []
+          }
+        ]
+      }
+    },
+    {
+      "query": "how to use a vibrator",
+      "liveSignalScore": 100,
+      "reddit": {
+        "count": 5,
+        "ok": true,
+        "error": "",
+        "mode": "direct_api",
+        "stats": {
+          "totalPosts": 5,
+          "avgScore": 4247,
+          "maxScore": 12879,
+          "avgComments": 394,
+          "subreddits": [
+            "WomensHealth",
+            "BestofRedditorUpdates",
+            "betterCallSaul"
+          ],
+          "totalBuyingSignals": 11,
+          "totalPainPoints": 7,
+          "competitors": []
+        },
+        "topDiscussions": [
+          {
+            "title": "I bought a vibrator and idk how to use it",
+            "subreddit": "WomensHealth",
+            "score": 4,
+            "numComments": 16,
+            "link": "https://reddit.com/r/WomensHealth/comments/1q05axs/i_bought_a_vibrator_and_idk_how_to_use_it/",
+            "painPoints": [],
+            "buyingSignals": [
+              "purchase_mention",
+              "considering",
+              "price_sensitivity"
+            ],
+            "competitors": []
+          },
+          {
+            "title": "How do i use a vibrator?",
+            "subreddit": "WomensHealth",
+            "score": 12,
+            "numComments": 13,
+            "link": "https://reddit.com/r/WomensHealth/comments/1orx54d/how_do_i_use_a_vibrator/",
+            "painPoints": [],
+            "buyingSignals": [
+              "purchase_mention",
+              "considering"
+            ],
+            "competitors": []
+          },
+          {
+            "title": "[New Update]: I think my sister just ruined our dad’s engagement to an amazing woman, and I hate her so much",
+            "subreddit": "BestofRedditorUpdates",
+            "score": 4150,
+            "numComments": 786,
+            "link": "https://reddit.com/r/BestofRedditorUpdates/comments/1sdod7o/new_update_i_think_my_sister_just_ruined_our_dads/",
+            "painPoints": [
+              "buyer_remorse",
+              "quality_issue",
+              "usability_issue"
+            ],
+            "buyingSignals": [
+              "purchase_mention",
+              "considering",
+              "seeking_recommendation",
+              "comparison_shopping"
+            ],
+            "competitors": []
+          },
+          {
+            "title": "I think my sister just ruined our dad’s engagement to an amazing woman, and I hate her so much",
+            "subreddit": "BestofRedditorUpdates",
+            "score": 4192,
+            "numComments": 917,
+            "link": "https://reddit.com/r/BestofRedditorUpdates/comments/1raiaxm/i_think_my_sister_just_ruined_our_dads_engagement/",
+            "painPoints": [
+              "buyer_remorse",
+              "quality_issue",
+              "fit_comfort",
+              "usability_issue"
+            ],
+            "buyingSignals": [
+              "seeking_recommendation",
+              "gift_intent"
+            ],
+            "competitors": []
+          },
+          {
+            "title": "Happy 20 years sober to Patrick Fabian",
+            "subreddit": "betterCallSaul",
+            "score": 12879,
+            "numComments": 238,
+            "link": "https://reddit.com/r/betterCallSaul/comments/1s5cubv/happy_20_years_sober_to_patrick_fabian/",
+            "painPoints": [],
+            "buyingSignals": [],
+            "competitors": []
+          }
+        ]
+      }
+    }
+  ]
+}
