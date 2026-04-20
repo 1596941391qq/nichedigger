@@ -50,7 +50,7 @@ program
       console.error(`[nichedigger] Auto-discovering subreddits for "${keywords[0]}"...`);
       discoveredSubs = await discoverSubreddits(keywords[0], 8);
       if (discoveredSubs.length > 0) {
-        console.error(`[nichedigger] Found: ${discoveredSubs.slice(0, 5).map((s) => `r/${s.subreddit} (${s.relevantPostCount} relevant)`).join(', ')}`);
+        console.error(`[nichedigger] Found: ${discoveredSubs.slice(0, 5).map((s) => `r/${s.subreddit} (${s.relevantPosts} relevant, ${(s.subscribers || 0).toLocaleString()} subs)`).join(', ')}`);
       }
     }
 
@@ -190,18 +190,23 @@ program
       writeFileSync(dashPath, JSON.stringify(report, null, 2));
     }
 
-    // Console summary
+    // Console summary — Chinese intent labels
     console.log(JSON.stringify({
-      brand: report.brand,
-      keywords: report.summary.keywordCount,
-      highPriority: report.summary.highPriorityCount,
-      subreddits: subsToSearch,
-      commentsRead: report.summary.commentsRead,
+      品牌: report.brand,
+      关键词数: report.summary.keywordCount,
+      高优先级_P0P1: report.summary.highPriorityCount,
+      发现的社区: subsToSearch.map((s) => `r/${s}`),
+      读取评论数: report.summary.commentsRead,
+      竞品发现: (llmResearch?.dynamicCompetitors || []).slice(0, 10).map((c) => `${c.brand}(${c.mentions}次)`),
       topOpportunities: topOpportunities.slice(0, 10).map((i) => ({
-        keyword: i.keyword,
-        priority: i.priority,
-        commercialScore: i.commercialScore,
-        liveSignalScore: i.liveSignalScore,
+        关键词: i.keyword,
+        优先级: i.priority,
+        意图: i.intentLabel || '未分类',
+        漏斗: i.funnel || '?',
+        商业分: i.commercialScore,
+        实时信号: i.liveSignalScore,
+        品牌适配: i.brandFitnessLabel || '?',
+        内容类型: i.contentFormat || '?',
       })),
     }, null, 2));
   });
