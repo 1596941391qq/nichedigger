@@ -36,7 +36,8 @@ Nichedigger:  "best vibrator" → 47 Reddit threads, 23 buying signals,
 - **Dynamic Competitor Discovery** — Doesn't rely on a hardcoded brand list. Extracts every brand mention from posts and comments, ranked by frequency
 - **18 Intent Types** — From competitor interception (95) to educational (35), every keyword gets a precise commercial intent score
 - **LLM-Powered Research Loop** — Any OpenAI-compatible LLM generates targeted Reddit search queries, iterates 3 rounds, each round deciding the next angle
-- **Relevance Filtering** — Token-overlap gate kills false positives. No more nuclear fusion when searching for vibrators
+- **Relevance Filtering** — Stemmer + token-overlap gate kills false positives. vibrator/vibrating/vibrations all match. No more CERN results when searching for vibrators
+- **15 Search Impulse Model** — Not SEO intent types. Real human search impulses: "第一次买的紧张感", "怕被室友听到", "值不值这个价", "不会上瘾吧". Each impulse expands to 5 keywords = 75 per run
 - **KD-Aware Priority** — P0/P1/P2/P3 ranking with keyword difficulty baked in. KD > 60 can never be P0
 - **Zero SEO Tool Dependency** — Pure Reddit data. No Semrush subscription needed
 
@@ -45,6 +46,32 @@ Nichedigger:  "best vibrator" → 47 Reddit threads, 23 buying signals,
 ![Dashboard - How It Works](docs/dashboard-top.png)
 
 ![Dashboard - Keywords & Signals](docs/dashboard-bottom.png)
+
+## Search Impulse Model
+
+Nichedigger doesn't classify keywords by SEO intent (commercial/informational/navigational). It models **real human search impulses** — the psychological drivers behind why someone types a query.
+
+From mining real Reddit conversations, we identified 15 recurring impulse types:
+
+| # | Impulse | Example Query |
+|---|---------|---------------|
+| 1 | First-time anxiety | "which vibrator should I get for my first one" |
+| 2 | Discretion fear | "quiet vibrator that roommates can't hear" |
+| 3 | Value justification | "are expensive vibrators actually worth it" |
+| 4 | Couple curiosity | "how to introduce vibrator to partner" |
+| 5 | Body safety anxiety | "what materials are body safe for vibrators" |
+| 6 | Brand comparison | "lovense vs lelo which is better reddit" |
+| 7 | Scenario imagining | "travel friendly vibrator TSA approved" |
+| 8 | Addiction fear | "can you get addicted to using a vibrator" |
+| 9 | Buyer remorse | "worst vibrator I ever bought reddit" |
+| 10 | Upgrade desire | "suction vibrator vs traditional vibrator" |
+| 11 | Normality validation | "is it normal for women to use vibrators" |
+| 12 | Gift embarrassment | "vibrator as gift for girlfriend" |
+| 13 | Privacy concern | "app controlled vibrator privacy security" |
+| 14 | Health motivated | "best vibrator for pelvic floor therapy" |
+| 15 | Social proof | "reddit favorite vibrator all time" |
+
+Each impulse expands to 5 real search queries = **75 keywords per run**, then fed into the full mining pipeline.
 
 ## How It Works
 
@@ -248,6 +275,32 @@ nichedigger/
 Nichedigger: "best vibrator" → 47条Reddit讨论, 23个购买信号,
              痛点: "室友能听到" → P0优先级, 建议写best-of指南
 ```
+
+### 搜索本能冲动模型
+
+Nichedigger 不按 SEO 意图分类关键词（商业/信息/导航型）。它建模的是**真人搜索本能冲动** — 驱动一个人去搜、去问、去聊的原始心理驱动。
+
+从 Reddit 真人讨论中提炼出 15 种反复出现的冲动类型：
+
+| # | 冲动 | 代表搜索词 |
+|---|------|-----------|
+| 1 | 第一次买的紧张感 | "which vibrator should I get for my first one" |
+| 2 | 怕被室友/家人听到 | "quiet vibrator that roommates can't hear" |
+| 3 | 值不值这个价 | "are expensive vibrators actually worth it" |
+| 4 | 和伴侣一起用的好奇 | "how to introduce vibrator to partner" |
+| 5 | 身体安全焦虑 | "what materials are body safe for vibrators" |
+| 6 | 竞品对比决策 | "lovense vs lelo which is better reddit" |
+| 7 | 特定场景想象 | "travel friendly vibrator TSA approved" |
+| 8 | 不会上瘾吧 | "can you get addicted to using a vibrator" |
+| 9 | 买了后悔/踩坑 | "worst vibrator I ever bought reddit" |
+| 10 | 升级体验的渴望 | "suction vibrator vs traditional vibrator" |
+| 11 | 这正常吗 | "is it normal for women to use vibrators" |
+| 12 | 送人的尴尬 | "vibrator as gift for girlfriend" |
+| 13 | 隐私顾虑 | "app controlled vibrator privacy security" |
+| 14 | 健康问题驱动 | "best vibrator for pelvic floor therapy" |
+| 15 | 社交验证需求 | "reddit favorite vibrator all time" |
+
+每条冲动泛化为 5 个真实搜索词 = **75 个关键词/轮**，送入完整挖掘管线。
 
 ### 和其他工具的区别
 
