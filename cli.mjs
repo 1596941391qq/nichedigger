@@ -5,7 +5,7 @@ import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 import { scoreIntent, assessBrandFitness, detectContentFormat, rankPriority } from './lib/intent-taxonomy.mjs';
-import { collectLiveSignals, discoverSubreddits } from './lib/source-adapters.mjs';
+import { collectLiveSignals, discoverSubreddits, guessCategorySubreddits } from './lib/source-adapters.mjs';
 import { isLLMAvailable } from './lib/llm-adapter.mjs';
 import { runResearchLoop } from './lib/research-loop.mjs';
 
@@ -54,7 +54,12 @@ program
       }
     }
 
-    const subsToSearch = [...targetSubreddits, ...discoveredSubs.slice(0, 3).map((s) => s.subreddit)];
+    // Merge: user-specified + discovered + hardcoded category fallback
+    const hardcodedSubs = [...new Set(keywords.slice(0, 3).flatMap((k) => guessCategorySubreddits(k)))];
+    const subsToSearch = [...new Set([...targetSubreddits, ...discoveredSubs.slice(0, 3).map((s) => s.subreddit), ...hardcodedSubs])];
+    if (subsToSearch.length > 0) {
+      console.error(`[nichedigger] Subreddit pool: ${subsToSearch.slice(0, 8).map((s) => `r/${s}`).join(', ')}`);
+    }
 
     // Phase 1: Intent scoring
     const scored = keywords.slice(0, limit).map((keyword) => {

@@ -1,0 +1,202 @@
+{
+  "brand": "arousen",
+  "generatedAt": "2026-04-21",
+  "description": "15 种搜索本能冲动 × 5 个关键词 = 75 词。冲动是人的原始搜索驱动，不是 SEO 意图分类。",
+  "impulses": [
+    {
+      "id": 1,
+      "impulse": "第一次买的紧张感",
+      "impulse_en": "first_time_anxiety",
+      "description": "第一次买情趣用品的人会很紧张——不知道怎么选、怕买错、怕尴尬。这种冲动驱动的搜索充满不确定和求助语气。",
+      "keywords": [
+        "first time buying a vibrator",
+        "which vibrator should I get for my first one",
+        "best vibrator for someone who never had one",
+        "how to choose your first vibrator",
+        "beginner vibrator recommendations"
+      ]
+    },
+    {
+      "id": 2,
+      "impulse": "怕被室友/家人听到",
+      "impulse_en": "discretion_fear",
+      "description": "住公寓、有室友、跟父母住的人，最怕的就是噪音。这是一个高频痛点，反复出现在 Reddit 帖子里。",
+      "keywords": [
+        "quiet vibrator that roommates can't hear",
+        "most silent vibrator for apartment living",
+        "vibrator quiet enough for thin walls",
+        "discreet vibrator won't wake anyone",
+        "best whisper quiet vibrator"
+      ]
+    },
+    {
+      "id": 3,
+      "impulse": "值不值这个价",
+      "impulse_en": "value_justification",
+      "description": "看到一百刀的 Lelo 和二十刀的 Amazon 货，本能地想问——贵的真的好那么多吗？我凭什么花这个钱？",
+      "keywords": [
+        "are expensive vibrators actually worth it",
+        "lovense vs cheap vibrator is it worth the money",
+        "lelo worth the price reddit",
+        "best vibrator under 50 dollars",
+        "what price range should I spend on a vibrator"
+      ]
+    },
+    {
+      "id": 4,
+      "impulse": "和伴侣一起用的好奇",
+      "impulse_en": "couple_curiosity",
+      "description": "不是自己用，是想和伴侣一起体验。怎么开口提？买哪种合适？对方会不会觉得被替代了？",
+      "keywords": [
+        "best vibrator for couples to use together",
+        "how to introduce vibrator to partner",
+        "couples vibrator recommendations for beginners",
+        "app controlled vibrator for long distance relationship",
+        "vibrator to use during sex with partner"
+      ]
+    },
+    {
+      "id": 5,
+      "impulse": "身体安全焦虑",
+      "impulse_en": "body_safety_anxiety",
+      "description": "这个东西放进身体里，材质安全吗？会不会有细菌？会不会神经损伤？这种焦虑驱动了大量搜索。",
+      "keywords": [
+        "are vibrators safe for your body",
+        "what materials are body safe for vibrators",
+        "can vibrators cause nerve damage",
+        "how to clean vibrator properly",
+        "phthalates in sex toys what to avoid"
+      ]
+    },
+    {
+      "id": 6,
+      "impulse": "竞品对比决策",
+      "impulse_en": "brand_comparison",
+      "description": "已经在 Lovense 和 Lelo 之间犹豫，或者看到别人推荐了 We-Vibe，想看看真实用户怎么说。",
+      "keywords": [
+        "lovense vs lelo which is better reddit",
+        "we-vibe chorus vs lovense lush review",
+        "womanizer vs satisfyer comparison",
+        "lelo sona vs womanizer premium real review",
+        "best brand for vibrators lovense or lelo"
+      ]
+    },
+    {
+      "id": 7,
+      "impulse": "特定场景想象",
+      "impulse_en": "scenario_imagining",
+      "description": "在浴室里用？出差带着？飞机上？这些场景想象驱动了非常具体的长尾搜索。",
+      "keywords": [
+        "best waterproof vibrator for shower",
+        "travel friendly vibrator TSA approved",
+        "vibrator to use in public discreetly",
+        "best vibrator for hotel room travel",
+        "small vibrator that fits in purse"
+      ]
+    },
+    {
+      "id": 8,
+      "impulse": "不会上瘾吧",
+      "impulse_en": "addiction_fear",
+      "description": "频繁使用会不会依赖？会不会让正常性生活变得没感觉？这种恐惧驱动了大量搜索。",
+      "keywords": [
+        "can you get addicted to using a vibrator",
+        "does vibrator use desensitize you",
+        "vibrator dependency how to avoid",
+        "taking a break from vibrator reset sensitivity",
+        "is it normal to use vibrator every day"
+      ]
+    },
+    {
+      "id": 9,
+      "impulse": "买了后悔/踩坑",
+      "impulse_en": "buyer_remorse",
+      "description": "买了不合适的产品——电池不行、太吵、材质差、不值那个价。这类搜索是真实的负面体验表达。",
+      "keywords": [
+        "worst vibrator I ever bought reddit",
+        "vibrator broke after one month",
+        "overpriced vibrator not worth it",
+        "common problems with cheap vibrators",
+        "vibrator complaints battery life"
+      ]
+    },
+    {
+      "id": 10,
+      "impulse": "升级体验的渴望",
+      "impulse_en": "upgrade_desire",
+      "description": "已经有一个基础款的，想知道更高级的能带来什么不同。这批用户转化率最高。",
+      "keywords": [
+        "upgrade from bullet vibrator what next",
+        "best premium vibrator for experienced users",
+        "suction vibrator vs traditional vibrator",
+        "app controlled vibrator worth the upgrade",
+        "rabbit vibrator for someone who only used basic ones"
+      ]
+    },
+    {
+      "id": 11,
+      "impulse": "这正常吗",
+      "impulse_en": "normality_validation",
+      "description": "我这样用正常吗？这种频率正常吗？别人也是这样吗？这类搜索本质上是在寻求社会认同。",
+      "keywords": [
+        "is it normal for women to use vibrators",
+        "how often do women use vibrators reddit",
+        "am I using my vibrator wrong",
+        "vibrator makes me finish too fast normal",
+        "can't orgasm without vibrator anymore help"
+      ]
+    },
+    {
+      "id": 12,
+      "impulse": "送人的尴尬",
+      "impulse_en": "gift_embarrassment",
+      "description": "想送给伴侣或朋友但不知道怎么开口。情人节、生日、新娘送礼会上这种冲动最强烈。",
+      "keywords": [
+        "vibrator as gift for girlfriend",
+        "best vibrator gift set for valentine",
+        "how to give vibrator as a present",
+        "bridal shower sex toy gift ideas",
+        "luxury vibrator gift box recommendation"
+      ]
+    },
+    {
+      "id": 13,
+      "impulse": "隐私顾虑",
+      "impulse_en": "privacy_concern",
+      "description": "包装上会写什么？快递员知道吗？app 控制的会不会被黑客入侵？这类隐私焦虑非常真实。",
+      "keywords": [
+        "discreet shipping vibrator packaging",
+        "do sex toys come in unmarked boxes",
+        "app controlled vibrator privacy security",
+        "can lovense app be hacked",
+        "how to hide vibrator at home"
+      ]
+    },
+    {
+      "id": 14,
+      "impulse": "健康问题驱动的探索",
+      "impulse_en": "health_motivated",
+      "description": "医生建议的、产后恢复、更年期相关、 pelvic floor 训练。这类搜索带着明确的健康目的。",
+      "keywords": [
+        "best vibrator for pelvic floor therapy",
+        "vibrator recommended by doctor for sexual health",
+        "post pregnancy vibrator safe to use",
+        "vibrator for menopause intimacy help",
+        "kegel vibrator vs regular vibrator difference"
+      ]
+    },
+    {
+      "id": 15,
+      "impulse": "社交验证需求",
+      "impulse_en": "social_proof",
+      "description": "我就想看看大家都用什么、买什么、推荐什么。best of、top picks、reddit favorite。这类搜索是最高量的。",
+      "keywords": [
+        "most popular vibrator 2025 reddit",
+        "reddit favorite vibrator all time",
+        "top rated vibrator women actually recommend",
+        "best vibrator according to reddit users",
+        "most bought vibrator on amazon reviews"
+      ]
+    }
+  ]
+}
