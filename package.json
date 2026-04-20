@@ -1,0 +1,18 @@
+{
+  "name": "nichedigger",
+  "version": "1.0.0",
+  "description": "Reddit-powered keyword mining for PSEO. Mine real user conversations to find high-conversion long-tail keywords.",
+  "type": "module",
+  "bin": { "nichedigger": "./cli.mjs" },
+  "scripts": {
+    "start": "node server.mjs",
+    "mine": "node cli.mjs",
+    "test": "node --test test/*.test.mjs"
+  },
+  "dependencies": {
+    "commander": "^12.0.0",
+    "undici": "^7.0.0"
+  },
+  "keywords": ["pseo", "keyword-research", "reddit", "seo", "intent-analysis"],
+  "license": "MIT"
+}

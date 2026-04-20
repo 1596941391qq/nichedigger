@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nichedigger — Reddit-Powered Keyword Mining</title>
+  <style>
+    :root{--bg:#0d1117;--surface:#161b22;--border:#30363d;--ink:#e6edf3;--muted:#8b949e;--accent:#f0883e;--accent-soft:rgba(240,136,62,.15);--ok:#3fb950;--warn:#d29922;--danger:#f85149;--purple:#bc8cff}
+    *{box-sizing:border-box;margin:0}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
+    .container{max-width:1100px;margin:0 auto;padding:32px 20px 64px}
+    .hero{text-align:center;padding:48px 0 32px}
+    .hero h1{font-size:40px;font-weight:800;letter-spacing:-1px}
+    .hero h1 span{color:var(--accent)}
+    .hero p{color:var(--muted);font-size:18px;margin-top:12px;max-width:600px;margin-left:auto;margin-right:auto}
+    .badges{margin-top:16px}
+    .badge{display:inline-block;padding:4px 12px;border:1px solid var(--border);border-radius:16px;font-size:13px;color:var(--muted);margin:0 4px}
+    .how-section{margin-top:48px}
+    .how-section h2{font-size:24px;font-weight:700;margin-bottom:24px;text-align:center}
+    .flow{display:flex;flex-direction:column;gap:0;align-items:center}
+    .flow-step{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px 24px;width:100%;max-width:600px;position:relative}
+    .flow-step .num{position:absolute;top:-12px;left:20px;background:var(--accent);color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+    .flow-step h3{font-size:15px;font-weight:600;margin-bottom:4px}
+    .flow-step p{font-size:14px;color:var(--muted)}
+    .flow-arrow{width:2px;height:24px;background:var(--border)}
+    .dashboard{margin-top:48px}
+    .dashboard h2{font-size:24px;font-weight:700;margin-bottom:16px}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:16px}
+    .card h3{font-size:16px;font-weight:600;margin-bottom:12px}
+    .config-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media(max-width:640px){.config-grid{grid-template-columns:1fr}}
+    label{display:block;font-size:13px;color:var(--muted);margin-bottom:4px}
+    input,select{width:100%;padding:10px 12px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--ink);font-size:14px}
+    input:focus,select:focus{outline:none;border-color:var(--accent)}
+    .btn{display:inline-block;padding:10px 20px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;border:none;transition:background .15s}
+    .btn-primary{background:var(--accent);color:#fff}
+    .btn-primary:hover{background:#e67c2e}
+    .btn-secondary{background:transparent;border:1px solid var(--border);color:var(--ink)}
+    .btn-secondary:hover{background:var(--border)}
+    .toolbar{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+    .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
+    .stat{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:16px;text-align:center}
+    .stat strong{display:block;font-size:28px;font-weight:700}
+    .stat span{font-size:13px;color:var(--muted)}
+    .pill{display:inline-block;padding:3px 10px;border-radius:12px;font-size:12px;margin:2px;border:1px solid var(--border);color:var(--muted)}
+    .pill-accent{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+    table{width:100%;border-collapse:collapse;font-size:14px}
+    th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--border)}
+    th{color:var(--muted);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.5px}
+    .p0{color:var(--ok);font-weight:700}.p1{color:var(--ok)}.p2{color:var(--warn)}.p3{color:var(--muted)}
+    .signal-list{display:grid;gap:12px}
+    .signal{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:16px}
+    .signal strong{font-size:15px}
+    .signal p{font-size:13px;color:var(--muted);margin-top:4px}
+    .signal ul{margin:10px 0 0;padding-left:18px;font-size:13px}
+    .signal li{margin-bottom:6px}
+    .tag-ok{color:var(--ok);font-size:12px}.tag-warn{color:var(--warn);font-size:12px}.tag-danger{color:var(--danger);font-size:12px}.tag-muted{color:var(--muted);font-size:12px}
+    .muted{color:var(--muted)}
+    .llm-fact{padding:12px;border-left:3px solid var(--accent);margin-top:8px}
+    .llm-fact .type{font-size:12px;color:var(--accent);font-weight:600}
+    #status{font-size:14px;color:var(--muted);margin-top:12px}
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="hero">
+    <h1>Niche<span>digger</span></h1>
+    <p>Mine high-conversion long-tail keywords from real Reddit conversations. No SEO soft content, no guesswork.</p>
+    <div class="badges">
+      <span class="badge">Reddit API</span>
+      <span class="badge">LLM-Powered</span>
+      <span class="badge">18 Intent Types</span>
+      <span class="badge">Open Source</span>
+    </div>
+  </div>
+  <div class="how-section">
+    <h2>How It Works</h2>
+    <div class="flow">
+      <div class="flow-step"><div class="num">1</div><h3>Input Keywords</h3><p>Feed in your keyword list. Nichedigger scores each one with 18 intent types and brand fitness.</p></div>
+      <div class="flow-arrow"></div>
+      <div class="flow-step"><div class="num">2</div><h3>LLM Query Understanding</h3><p>GLM-4-flash classifies top keywords and generates Reddit-optimized search queries — targeted questions real users ask.</p></div>
+      <div class="flow-arrow"></div>
+      <div class="flow-step"><div class="num">3</div><h3>Reddit Deep Mining</h3><p>Searches Reddit via JSON API. Extracts buying signals, pain points, and competitor mentions. 3-round iterative deepening.</p></div>
+      <div class="flow-arrow"></div>
+      <div class="flow-step"><div class="num">4</div><h3>Relevance Filtering</h3><p>Every post goes through a topical relevance check. Irrelevant results get zero signals. No false positives.</p></div>
+      <div class="flow-arrow"></div>
+      <div class="flow-step"><div class="num">5</div><h3>Priority Ranking</h3><p>P0-P3 based on: commercial intent (45%), Reddit live signals (25%), volume (20%), KD penalty (10%). KD&gt;60 capped at P1.</p></div>
+      <div class="flow-arrow"></div>
+      <div class="flow-step"><div class="num">6</div><h3>Output</h3><p>JSON report + CSV + this dashboard. See why each keyword got its priority, backed by real Reddit evidence.</p></div>
+    </div>
+  </div>
+  <div class="dashboard">
+    <h2>Dashboard</h2>
+    <div class="card">
+      <h3>Configuration</h3>
+      <div class="config-grid">
+        <div><label>Brand</label><select id="brandSelect"><option value="arousen">arousen</option><option value="302ai">302ai</option><option value="pinkpunch">pinkpunch</option><option value="hakkoai">hakkoai</option><option value="leewow">leewow</option></select></div>
+        <div><label>Data Path</label><input id="dataPathInput" value="data/intent-workbench/arousen/intent-workbench-dashboard.json"></div>
+      </div>
+      <div class="toolbar"><button class="btn btn-primary" id="loadBtn">Load Dashboard</button><button class="btn btn-secondary" onclick="window.open(document.getElementById('dataPathInput').value)">Open Raw JSON</button></div>
+      <div id="status">Ready.</div>
+    </div>
+    <div class="card"><h3>Overview</h3><div class="stat-grid" id="summaryStats"><div class="stat"><strong>-</strong><span>Keywords</span></div><div class="stat"><strong>-</strong><span>Reddit Queries</span></div><div class="stat"><strong>-</strong><span>P0/P1</span></div><div class="stat"><strong>-</strong><span>LLM</span></div></div><div id="intentPills" style="margin-top:12px;"></div></div>
+    <div class="card"><h3>Priority Keywords</h3><table><thead><tr><th>Keyword</th><th>P</th><th>Intent</th><th>Com.</th><th>Live</th><th>Fitness</th><th>Format</th></tr></thead><tbody id="keywordRows"><tr><td colspan="7" class="muted">Load a dashboard.</td></tr></tbody></table></div>
+    <div class="card"><h3>Reddit Signals</h3><div id="signals" class="signal-list"><div class="signal"><p class="muted">Load a dashboard.</p></div></div></div>
+    <div class="card" id="llmCard" style="display:none;"><h3>LLM Research</h3><div id="llmStatus" class="muted"></div><div id="llmQueries" style="margin-top:8px;"></div><div id="llmFacts" class="signal-list" style="margin-top:12px;"></div></div>
+  </div>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+async function loadDashboard(){const path=$('dataPathInput').value;$('status').textContent=`Loading ${path}...`;try{const res=await fetch(path,{cache:'no-store'});if(!res.ok)throw new Error(`HTTP ${res.status}`);const d=await res.json();renderStats(d);renderIntents(d);renderKeywords(d);renderSignals(d);renderLLM(d);$('status').textContent=`Loaded ${d.brand||'?'}, ${d.generatedAt||'unknown'}`}catch(e){$('status').textContent=`Failed: ${e.message}`}}
+function renderStats(d){const s=d.summary||{};$('summaryStats').innerHTML=[[s.keywordCount??0,'Keywords'],[s.liveQueryCount??0,'Reddit Queries'],[s.highPriorityCount??0,'P0/P1'],[d.llmEnabled?'ON':'OFF','LLM']].map(([v,l])=>`<div class="stat"><strong>${v}</strong><span>${l}</span></div>`).join('')}
+function renderIntents(d){$('intentPills').innerHTML=(d.intentDistribution||[]).map(i=>`<span class="pill">${i.intentLabel}: ${i.count}</span>`).join('')||'<span class="muted">No data</span>'}
+function renderKeywords(d){const rows=(d.topOpportunities||[]).slice(0,25);if(!rows.length){$('keywordRows').innerHTML='<tr><td colspan="7" class="muted">No data.</td></tr>';return}$('keywordRows').innerHTML=rows.map(r=>`<tr><td><strong>${r.keyword||''}</strong></td><td class="${(r.priority||'').toLowerCase()}">${r.priority||''}</td><td>${r.intent||''}</td><td>${r.commercialScore??0}</td><td>${r.liveSignalScore??0}</td><td>${r.brandFitness||''}</td><td>${r.contentFormat||''}</td></tr>`).join('')}
+function renderSignals(d){const signals=d.liveSignals||[];if(!signals.length){$('signals').innerHTML='<div class="signal"><p class="muted">No signals.</p></div>';return}$('signals').innerHTML=signals.map(s=>{const reddit=s.reddit||{};const stats=reddit.stats||{};const posts=reddit.topDiscussions||[];const ph=posts.slice(0,4).map(p=>{const b=(p.buyingSignals||[]).map(x=>`<span class="tag-ok">${x}</span>`).join(' ');const pa=(p.painPoints||[]).map(x=>`<span class="tag-warn">${x}</span>`).join(' ');const c=(p.competitors||[]).map(x=>`<span class="tag-muted">${x}</span>`).join(' ');return`<li><strong>${p.score||0}↑ ${p.numComments||0}💬</strong> ${p.title||'untitled'} ${p.subreddit?`<span class="pill">r/${p.subreddit}</span>`:''} ${b?`<br>Buying: ${b}`:''} ${pa?`<br>Pain: ${pa}`:''} ${c?`<br>Comp: ${c}`:''}</li>`}).join('');return`<div class="signal"><strong>${s.query}</strong><p>Score: ${s.liveSignalScore??0} | Reddit: ${reddit.ok?`${reddit.count} posts (${reddit.mode||''})`:(reddit.error||'unavailable')} | Relevant: ${stats.totalPosts||0}</p>${stats.avgScore?`<p>Heat: avg=${stats.avgScore} max=${stats.maxScore} | Comments avg=${stats.avgComments} | Buying=${stats.totalBuyingSignals} | Pain=${stats.totalPainPoints}</p>`:''}${(stats.subreddits||[]).length?`<p>${stats.subreddits.map(s=>`<span class="pill">r/${s}</span>`).join(' ')}</p>`:''}${ph?`<ul>${ph}</ul>`:''}</div>`}).join('')}
+function renderLLM(d){const lr=d.llmResearch;if(!lr||!lr.available){$('llmCard').style.display='none';return}$('llmCard').style.display='';$('llmStatus').textContent=`Iterations: ${lr.iterations||0}`;if(lr.classification){const c=lr.classification;$('llmQueries').innerHTML=`<span class="pill pill-accent">${c.primaryIntent||'?'}</span>`+(c.searchQueries||[]).map(q=>`<span class="pill">${q}</span>`).join('')}const facts=lr.extractedFacts||[];$('llmFacts').innerHTML=facts.length?facts.map(f=>`<div class="llm-fact"><span class="type">${f.type||'fact'}</span><p style="margin-top:4px;">${f.fact||''}</p></div>`).join(''):'<p class="muted">No facts extracted.</p>'}
+$('loadBtn').addEventListener('click',loadDashboard);
+$('brandSelect').addEventListener('change',()=>{$('dataPathInput').value=`data/intent-workbench/${$('brandSelect').value}/intent-workbench-dashboard.json`});
+</script>
+</body>
+</html>
