@@ -30,8 +30,8 @@ Nichedigger:  "best vibrator" → 47 Reddit threads, 23 buying signals,
 
 ## What Makes It Different
 
-- **Subreddit Discovery** — Automatically finds which communities discuss your niche, then targets them with `restrict_sr` for 5-10x signal density vs site-wide search
-- **Comment Mining** — Reads top 5 comments on every relevant post. The real buying signals live in comments, not titles. Comment signals are merged into the scoring
+- **Subreddit Discovery** — 3-pronged: Reddit's subreddit search API (by name/description) + post search with 4 query variations (original, review, recommendation, "best of") + merge by signal density and subscriber count. Finds communities you'd never think to search for
+- **Comment Mining** — Reads ALL comments on every relevant post (top-level + replies, up to 500 per thread). Comments carry more signal than titles. Comment signals are weighted 2x in scoring
 - **Multi-Sort Search** — Searches by relevance AND by top (upvotes). Different sort modes surface different opportunities
 - **Dynamic Competitor Discovery** — Doesn't rely on a hardcoded brand list. Extracts every brand mention from posts and comments, ranked by frequency
 - **18 Intent Types** — From competitor interception (95) to educational (35), every keyword gets a precise commercial intent score
@@ -130,7 +130,7 @@ Either from `--subreddit` flags or auto-discovered communities. Uses `restrict_s
 If LLM is enabled, each round analyzes what was found and decides the next search angle. The LLM can target specific subreddits, try new query formulations, or extract content from promising threads.
 
 ### Comment Mining
-For every relevant post, the top 5 comments are fetched. Comments contain:
+For every relevant post, ALL comments are fetched (top-level + one level of replies, up to 500 per thread). Comments are weighted 2x more than title signals because they contain the real decision-making:
 - **Purchase decisions**: "I ended up buying Lovense because..."
 - **Use case fit**: "Great for apartment living, can't hear through walls"
 - **Comparisons**: "Compared to Lelo, the app is way better"
@@ -251,8 +251,8 @@ Nichedigger: "best vibrator" → 47条Reddit讨论, 23个购买信号,
 
 ### 和其他工具的区别
 
-- **自动发现 Subreddit** — 自动找到你的品类在哪些社区讨论，然后用 `restrict_sr` 定向搜索，信号密度比全站搜索高 5-10 倍
-- **评论深度挖掘** — 读取每个相关帖子的前 5 条评论。真正的购买决策藏在评论里，不在标题里。评论信号直接合并到评分中
+- **自动发现 Subreddit** — 三路发现：Reddit subreddit 搜索 API（按名称/描述）+ 4 种查询变体的帖子搜索（原词、review、recommendation、"best of"）+ 按信号密度和订阅数合并排序。能发现你根本想不到要搜的社区
+- **评论深度挖掘** — 读取每个相关帖子的全部评论（顶级评论 + 一层回复，每帖最多 500 条）。评论比帖子标题更重要，信号权重 2x
 - **多维度搜索** — 同时用 relevance 和 top 排序搜索，不同排序维度发现不同机会
 - **动态竞品发现** — 不依赖硬编码品牌列表，从帖子标题 + 评论区自动提取品牌提及，按频率排序
 - **18种意图分类** — 从竞品拦截(95分)到教育科普(35分)，每个词精确打分
@@ -281,7 +281,7 @@ Nichedigger 使用多通道管线最大化信号提取：
 如果启用了 LLM，每轮分析已有发现，决定下一个搜索角度。LLM 可以指定特定 subreddit、尝试新的查询形式、或从有潜力的帖子中提取内容。
 
 **评论挖掘**
-对每个相关帖子获取前 5 条评论。评论包含：
+对每个相关帖子获取全部评论（顶级评论 + 一层回复，每帖最多 500 条）。评论信号权重是标题的 2 倍，因为真正的决策藏在评论里：
 - **购买决策**："I ended up buying Lovense because..."
 - **场景匹配**："Great for apartment living, can't hear through walls"
 - **对比评测**："Compared to Lelo, the app is way better"
