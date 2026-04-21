@@ -65,10 +65,10 @@ program
       if (rawPosts.length >= 5) {
         console.error(`[nichedigger] LLM analyzing discussions to discover search impulses...`);
         impulses = await discoverImpulses(rawPosts, seedTopic);
-        // Filter out short/generic impulses (< 10 Chinese chars)
+        // Filter out short/generic impulses (< 8 Chinese chars)
         impulses = impulses.filter((imp) => {
           const cnChars = (imp.impulse || '').replace(/[^\u4e00-\u9fff]/g, '');
-          return cnChars.length >= 10;
+          return cnChars.length >= 8;
         });
         console.error(`[nichedigger] Discovered ${impulses.length} impulses (after quality filter)`);
 
