@@ -81,6 +81,15 @@ program
     }
 
     const limit = Math.min(keywords.length, Number(opts.limit || 75));
+    const targetSubreddits = opts.subreddit ? opts.subreddit.split(',').map((s) => s.trim()) : [];
+    const sortModes = opts.sort.split(',').map((s) => s.trim());
+    const fetchComments = opts.comments !== false;
+
+    console.error(`[nichedigger] Processing ${limit} keywords for brand "${opts.brand}"`);
+    if (targetSubreddits.length) console.error(`[nichedigger] Target subreddits: ${targetSubreddits.join(', ')}`);
+
+    // Phase 0: Subreddit discovery
+    let discoveredSubs = [];
     if (targetSubreddits.length === 0 && keywords.length > 0) {
       console.error(`[nichedigger] Auto-discovering subreddits for "${keywords[0]}"...`);
       discoveredSubs = await discoverSubreddits(keywords[0], 8);
