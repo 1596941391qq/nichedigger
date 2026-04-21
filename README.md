@@ -51,7 +51,25 @@ Nichedigger:  "best vibrator" → 47 Reddit threads, 23 buying signals,
 
 Nichedigger doesn't classify keywords by SEO intent (commercial/informational/navigational). It models **real human search impulses** — the psychological drivers behind why someone types a query.
 
-From mining real Reddit conversations, we identified 15 recurring impulse types:
+These impulses are NOT hardcoded. They are **discovered dynamically** from Reddit discussions using LLM analysis. Different niches produce completely different impulses:
+
+- Vibrators → "怕被室友听到", "值不值这个价", "不会上瘾吧"
+- AI tools → "会不会替代我的工作", "API调用会不会突然涨价"
+- Gaming → "这游戏值不值得全价", "新手选哪个职业"
+
+### How it works
+
+```
+Seed topic → Reddit scan (5 queries) → LLM impulse discovery → N impulses × 5 keywords
+```
+
+1. Feed a seed topic (e.g. "vibrator", "AI writing tool", "PS5 games")
+2. Scan Reddit for real discussions (5 query variations, with comments)
+3. LLM analyzes the discussions and identifies 10-20 distinct human impulses
+4. Each impulse expands to 5 real search queries a person with that impulse would type
+5. All keywords feed into the mining pipeline
+
+### Example: Vibrator niche impulses discovered from Reddit
 
 | # | Impulse | Example Query |
 |---|---------|---------------|
@@ -132,7 +150,11 @@ node cli.mjs --keywords "best vibrator" --brand arousen --no-comments
 export LLM_API_KEY=your_api_key
 node cli.mjs --keywords "best vibrator,quiet vibrator" --brand arousen --iterations 3
 
-# Full power: everything enabled
+# Full power: discover mode — LLM finds impulses from Reddit
+export LLM_API_KEY=your_api_key
+node cli.mjs --keywords "vibrator" --brand arousen --discover --iterations 3
+
+# Manual keywords with full pipeline
 node cli.mjs --keywords "best vibrator,quiet vibrator" \
   --brand arousen \
   --subreddit SexToys,wandvibers \
@@ -215,6 +237,7 @@ node cli.mjs [options]
   --output <dir>           Output directory (default: ./output)
   --limit <n>              Max keywords to analyze (default: 30)
   --iterations <n>         LLM research rounds (default: 3)
+  --discover               Discover impulses from Reddit via LLM (requires --keywords as seed topic)
   --dry-run                Print results, no file output
 ```
 
@@ -280,7 +303,25 @@ Nichedigger: "best vibrator" → 47条Reddit讨论, 23个购买信号,
 
 Nichedigger 不按 SEO 意图分类关键词（商业/信息/导航型）。它建模的是**真人搜索本能冲动** — 驱动一个人去搜、去问、去聊的原始心理驱动。
 
-从 Reddit 真人讨论中提炼出 15 种反复出现的冲动类型：
+冲动不是硬编码的，而是**从 Reddit 讨论中动态发现**的。不同品类产生完全不同的冲动：
+
+- 情趣用品 → "怕被室友听到", "值不值这个价", "不会上瘾吧"
+- AI 工具 → "会不会替代我的工作", "API调用会不会突然涨价"
+- 游戏 → "这游戏值不值得全价", "新手选哪个职业"
+
+### 工作原理
+
+```
+种子话题 → Reddit 扫描（5 种查询变体） → LLM 冲动发现 → N 种冲动 × 5 个关键词
+```
+
+1. 输入种子话题（如"vibrator"、"AI writing tool"、"PS5 games"）
+2. 扫描 Reddit 真实讨论（5 种查询变体，含评论）
+3. LLM 分析讨论内容，识别 10-20 种不同的搜索本能冲动
+4. 每种冲动泛化为 5 个真实搜索词
+5. 所有关键词送入挖掘管线
+
+### 示例：情趣用品品类从 Reddit 中发现的冲动
 
 | # | 冲动 | 代表搜索词 |
 |---|------|-----------|
@@ -460,6 +501,7 @@ node cli.mjs [选项]
   --output <目录>           输出目录（默认: ./output）
   --limit <数字>            最大关键词数（默认: 30）
   --iterations <数字>       LLM研究轮数（默认: 3）
+  --discover               从Reddit动态发现搜索冲动（需要LLM）
   --dry-run                 只打印结果，不写文件
 ```
 

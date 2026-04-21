@@ -5,8 +5,8 @@ import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 import { scoreIntent, assessBrandFitness, detectContentFormat, rankPriority } from './lib/intent-taxonomy.mjs';
-import { collectLiveSignals, discoverSubreddits, guessCategorySubreddits } from './lib/source-adapters.mjs';
-import { isLLMAvailable } from './lib/llm-adapter.mjs';
+import { collectLiveSignals, discoverSubreddits, guessCategorySubreddits, fetchRedditSignals } from './lib/source-adapters.mjs';
+import { isLLMAvailable, discoverImpulses } from './lib/llm-adapter.mjs';
 import { runResearchLoop } from './lib/research-loop.mjs';
 
 const program = new Command();
@@ -32,20 +32,55 @@ program
   .option('--iterations <n>', 'LLM research rounds', '3')
   .option('--no-comments', 'Skip reading top comments')
   .option('--dry-run', 'Print results, no file output')
+  .option('--discover', 'Discover impulses from Reddit instead of using provided keywords. Requires --keywords as seed topic.')
   .action(async (opts) => {
-    const keywords = parseKeywords(opts.keywords);
-    const limit = Math.min(keywords.length, Number(opts.limit || 30));
-    const targetSubreddits = opts.subreddit ? opts.subreddit.split(',').map((s) => s.trim()) : [];
-    const sortModes = opts.sort.split(',').map((s) => s.trim());
-    const fetchComments = opts.comments !== false; // --no-comments disables
+    let keywords = parseKeywords(opts.keywords);
+    let impulses = [];
     const useLLM = isLLMAvailable();
 
-    console.error(`[nichedigger] Processing ${limit} keywords for brand "${opts.brand}"`);
-    if (targetSubreddits.length) console.error(`[nichedigger] Target subreddits: ${targetSubreddits.join(', ')}`);
-    if (useLLM) console.error(`[nichedigger] LLM research enabled (${opts.iterations} iterations)`);
+    // ── Discover mode: mine impulses from Reddit first ──
+    if (opts.discover && useLLM) {
+      const seedTopic = keywords[0] || 'vibrator';
+      console.error(`[nichedigger] Discover mode: mining impulses for "${seedTopic}"...`);
 
-    // Phase 0: Subreddit discovery (if not specified)
-    let discoveredSubs = [];
+      // Step 1: Quick Reddit scan to get raw discussions
+      console.error(`[nichedigger] Scanning Reddit for real discussions...`);
+      const rawPosts = [];
+      const scanQueries = [seedTopic, `${seedTopic} review reddit`, `${seedTopic} recommendation`, `best ${seedTopic}`, `${seedTopic} advice`];
+      for (const q of scanQueries) {
+        try {
+          const r = await fetchRedditSignals(q, { limit: 15, sort: 'relevance', fetchComments: true });
+          if (r.ok && r.items) {
+            for (const post of r.items) {
+              if (post._relevance >= 0.3 && post.title) {
+                rawPosts.push(post);
+              }
+            }
+          }
+        } catch {}
+      }
+      console.error(`[nichedigger] Collected ${rawPosts.length} relevant posts`);
+
+      // Step 2: LLM discovers impulses from these discussions
+      if (rawPosts.length >= 5) {
+        console.error(`[nichedigger] LLM analyzing discussions to discover search impulses...`);
+        impulses = await discoverImpulses(rawPosts, seedTopic);
+        console.error(`[nichedigger] Discovered ${impulses.length} impulses`);
+
+        // Step 3: Collect all keywords from impulses
+        keywords = impulses.flatMap((imp) => imp.keywords || []);
+        console.error(`[nichedigger] Generated ${keywords.length} keywords from impulses`);
+
+        // Print impulse summary
+        for (const imp of impulses) {
+          console.error(`  ${imp.id}. ${imp.impulse} (${imp.impulse_en}) → ${(imp.keywords||[]).length} keywords`);
+        }
+      } else {
+        console.error(`[nichedigger] Not enough relevant posts for impulse discovery, using provided keywords`);
+      }
+    }
+
+    const limit = Math.min(keywords.length, Number(opts.limit || 75));
     if (targetSubreddits.length === 0 && keywords.length > 0) {
       console.error(`[nichedigger] Auto-discovering subreddits for "${keywords[0]}"...`);
       discoveredSubs = await discoverSubreddits(keywords[0], 8);
@@ -163,6 +198,8 @@ program
       brand: opts.brand,
       generatedAt: new Date().toISOString(),
       llmEnabled: useLLM,
+      discoverMode: !!opts.discover,
+      impulses: impulses.length > 0 ? impulses : undefined,
       llmResearch: llmResearch ? {
         available: llmResearch.llmAvailable,
         classification: llmResearch.llmClassification,
@@ -195,25 +232,33 @@ program
       writeFileSync(dashPath, JSON.stringify(report, null, 2));
     }
 
-    // Console summary — Chinese intent labels
-    console.log(JSON.stringify({
+    // Console summary — Chinese intent labels + impulses
+    const output = {
       品牌: report.brand,
       关键词数: report.summary.keywordCount,
       高优先级_P0P1: report.summary.highPriorityCount,
-      发现的社区: subsToSearch.map((s) => `r/${s}`),
+      发现的社区: subsToSearch.slice(0, 8).map((s) => `r/${s}`),
       读取评论数: report.summary.commentsRead,
       竞品发现: (llmResearch?.dynamicCompetitors || []).slice(0, 10).map((c) => `${c.brand}(${c.mentions}次)`),
-      topOpportunities: topOpportunities.slice(0, 10).map((i) => ({
-        关键词: i.keyword,
-        优先级: i.priority,
-        意图: i.intentLabel || '未分类',
-        漏斗: i.funnel || '?',
-        商业分: i.commercialScore,
-        实时信号: i.liveSignalScore,
-        品牌适配: i.brandFitnessLabel || '?',
-        内容类型: i.contentFormat || '?',
-      })),
-    }, null, 2));
+    };
+    if (impulses.length > 0) {
+      output.发现的搜索冲动 = impulses.map((imp) => ({
+        冲动: imp.impulse,
+        english: imp.impulse_en,
+        泛化关键词: (imp.keywords || []).slice(0, 3),
+      }));
+    }
+    output.topOpportunities = topOpportunities.slice(0, 15).map((i) => ({
+      关键词: i.keyword,
+      优先级: i.priority,
+      意图: i.intentLabel || '未分类',
+      漏斗: i.funnel || '?',
+      商业分: i.commercialScore,
+      实时信号: i.liveSignalScore,
+      品牌适配: i.brandFitnessLabel || '?',
+      内容类型: i.contentFormat || '?',
+    }));
+    console.log(JSON.stringify(output, null, 2));
   });
 
 function inferLiveScore(keyword, liveSignals) {
