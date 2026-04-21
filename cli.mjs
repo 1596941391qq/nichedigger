@@ -52,7 +52,7 @@ program
           const r = await fetchRedditSignals(q, { limit: 15, sort: 'relevance', fetchComments: true });
           if (r.ok && r.items) {
             for (const post of r.items) {
-              if (post._relevance >= 0.3 && post.title) {
+              if (post._relevance >= 0.5 && post.title) {
                 rawPosts.push(post);
               }
             }
@@ -88,18 +88,19 @@ program
     console.error(`[nichedigger] Processing ${limit} keywords for brand "${opts.brand}"`);
     if (targetSubreddits.length) console.error(`[nichedigger] Target subreddits: ${targetSubreddits.join(', ')}`);
 
-    // Phase 0: Subreddit discovery
+    // Phase 0: Subreddit discovery — always use seed topic, not expanded keywords
+    const seedTopic = opts.discover ? (parseKeywords(opts.keywords)[0] || keywords[0]) : keywords[0];
     let discoveredSubs = [];
     if (targetSubreddits.length === 0 && keywords.length > 0) {
-      console.error(`[nichedigger] Auto-discovering subreddits for "${keywords[0]}"...`);
-      discoveredSubs = await discoverSubreddits(keywords[0], 8);
+      console.error(`[nichedigger] Auto-discovering subreddits for "${seedTopic}"...`);
+      discoveredSubs = await discoverSubreddits(seedTopic, 8);
       if (discoveredSubs.length > 0) {
         console.error(`[nichedigger] Found: ${discoveredSubs.slice(0, 5).map((s) => `r/${s.subreddit} (${s.relevantPosts} relevant, ${(s.subscribers || 0).toLocaleString()} subs)`).join(', ')}`);
       }
     }
 
     // Merge: user-specified + discovered + hardcoded category fallback
-    const hardcodedSubs = [...new Set(keywords.slice(0, 3).flatMap((k) => guessCategorySubreddits(k)))];
+    const hardcodedSubs = [...new Set([seedTopic, ...keywords.slice(0, 2)].flatMap((k) => guessCategorySubreddits(k)))];
     const subsToSearch = [...new Set([...targetSubreddits, ...discoveredSubs.slice(0, 3).map((s) => s.subreddit), ...hardcodedSubs])];
     if (subsToSearch.length > 0) {
       console.error(`[nichedigger] Subreddit pool: ${subsToSearch.slice(0, 8).map((s) => `r/${s}`).join(', ')}`);
@@ -293,7 +294,7 @@ function buildQualitativeAnalysis(liveSignals, impulses) {
     const reddit = sig.reddit;
     if (!reddit || !reddit.ok) continue;
     for (const item of (reddit.items || [])) {
-      if ((item._relevance || 0) >= 0.4) {
+      if ((item._relevance || 0) >= 0.5) {
         allPosts.push({ ...item, _query: sig.query });
       }
     }
