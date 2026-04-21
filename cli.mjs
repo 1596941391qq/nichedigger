@@ -191,6 +191,7 @@ program
           semrushVolume: row.semrushVolume,
           liveSignalScore,
           kd: row.kd,
+          keyword: row.keyword,
         }),
       };
     });
