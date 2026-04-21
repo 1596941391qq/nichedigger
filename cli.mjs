@@ -288,6 +288,16 @@ function buildQualitativeAnalysis(liveSignals, impulses) {
     impulseEvidence: [],
   };
 
+  // Known off-topic subreddits that frequently appear in broad searches
+  const OFF_TOPIC_SUBS = new Set([
+    'epstein', 'politics', 'worldnews', 'news', 'nottheonion',
+    'conspiracy', 'conservative', 'liberal', 'politicaldiscussion',
+    'pics', 'funny', 'gaming', 'movies', 'television',
+    'askreddit', 'todayilearned', 'showerthoughts', 'explainlikeimfive',
+    'nosleep', 'tifu', 'bestofredditorupdates', 'borupdates',
+    'hfy', 'astralprojection', 'entertainment', 'celebrity',
+  ]);
+
   // Collect all relevant posts across all signals
   const allPosts = [];
   for (const sig of liveSignals) {
@@ -295,6 +305,13 @@ function buildQualitativeAnalysis(liveSignals, impulses) {
     if (!reddit || !reddit.ok) continue;
     for (const item of (reddit.items || [])) {
       if ((item._relevance || 0) >= 0.5) {
+        const subLower = (item.subreddit || '').toLowerCase();
+        // Skip posts from known off-topic communities
+        if (OFF_TOPIC_SUBS.has(subLower)) continue;
+        // Additional relevance check: at least one seed-relevant keyword in title/content
+        const text = [item.title, item.content].filter(Boolean).join(' ').toLowerCase();
+        const hasRelevantKeyword = /\b(vibrat|stimulat|pleasure|clitoral|g-spot|wand|suction|lovense|lelo|we-vibe|womanizer|satisfyer|dame|dildo|sex\s*toy|bullet|rabbit)\b/i.test(text);
+        if (!hasRelevantKeyword && (item._relevance || 0) < 0.7) continue;
         allPosts.push({ ...item, _query: sig.query });
       }
     }
