@@ -4,3 +4,8 @@ data/*/
 *.log
 .env
 .DS_Store
+
+# Tool output (not for repo)
+output/
+screenshot-*.html
+package-lock.json

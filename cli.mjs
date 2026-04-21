@@ -28,7 +28,7 @@ program
   .option('--subreddit <string>', 'Comma-separated subreddits to target (e.g. SexToys,wandvibers)')
   .option('--sort <string>', 'Comma-separated sort modes: relevance,top,new', 'relevance,top')
   .option('--output <dir>', 'Output directory', './output')
-  .option('--limit <n>', 'Max keywords to analyze', '30')
+  .option('--limit <n>', 'Max keywords to analyze', '100')
   .option('--iterations <n>', 'LLM research rounds', '3')
   .option('--no-comments', 'Skip reading top comments')
   .option('--dry-run', 'Print results, no file output')
@@ -203,6 +203,9 @@ program
         return (po[a.priority] ?? 9) - (po[b.priority] ?? 9) || b.commercialScore - a.commercialScore;
       });
 
+    // Build qualitative analysis from raw Reddit data
+    const qualitativeAnalysis = buildQualitativeAnalysis(liveSignals, impulses);
+
     // Build report
     const report = {
       brand: opts.brand,
@@ -225,6 +228,7 @@ program
         subredditCount: subsToSearch.length,
         commentsRead: liveSignals.reduce((s, sig) => s + (sig.reddit?.commentCount || 0), 0),
       },
+      qualitativeAnalysis,
       keywords: enriched,
       topOpportunities,
       liveSignals,
@@ -270,6 +274,207 @@ program
     }));
     console.log(JSON.stringify(output, null, 2));
   });
+
+// ── Qualitative analysis: full content breakdown from Reddit data ──
+function buildQualitativeAnalysis(liveSignals, impulses) {
+  const analysis = {
+    topPosts: [],
+    hotDiscussions: [],
+    userPainPoints: [],
+    buyingSignalsRaw: [],
+    brandMentions: [],
+    communityInsights: [],
+    impulseEvidence: [],
+  };
+
+  // Collect all relevant posts across all signals
+  const allPosts = [];
+  for (const sig of liveSignals) {
+    const reddit = sig.reddit;
+    if (!reddit || !reddit.ok) continue;
+    for (const item of (reddit.items || [])) {
+      if ((item._relevance || 0) >= 0.4) {
+        allPosts.push({ ...item, _query: sig.query });
+      }
+    }
+  }
+
+  // Deduplicate by title
+  const seenTitles = new Set();
+  const uniquePosts = allPosts.filter((p) => {
+    const key = (p.title || '').toLowerCase().slice(0, 80);
+    if (seenTitles.has(key)) return false;
+    seenTitles.add(key);
+    return true;
+  });
+
+  // Top posts: highest-scoring relevant posts with full text
+  analysis.topPosts = uniquePosts
+    .sort((a, b) => (b.score || 0) - (a.score || 0))
+    .slice(0, 30)
+    .map((p) => ({
+      title: p.title,
+      subreddit: `r/${p.subreddit}`,
+      score: p.score,
+      comments: p.numComments,
+      excerpt: (p.content || '').slice(0, 300),
+      buyingSignals: p.buyingSignals || [],
+      painPoints: p.painPoints || [],
+      competitors: p.competitors || [],
+      topComments: (p.comments || []).slice(0, 5).map((c) => ({
+        excerpt: c.body.slice(0, 200),
+        score: c.score,
+      })),
+    }));
+
+  // Hot discussions: most-commented relevant posts
+  analysis.hotDiscussions = uniquePosts
+    .sort((a, b) => (b.numComments || 0) - (a.numComments || 0))
+    .slice(0, 20)
+    .map((p) => ({
+      title: p.title,
+      subreddit: `r/${p.subreddit}`,
+      comments: p.numComments,
+      score: p.score,
+      excerpt: (p.content || '').slice(0, 300),
+      topCommentThemes: summarizeCommentThemes(p.comments || []),
+    }));
+
+  // User pain points: collect actual pain point text from posts + comments
+  const painLabels = {
+    buyer_remorse: '后悔/退货',
+    quality_issue: '质量问题',
+    fit_comfort: '尺寸/舒适度',
+    battery_issue: '续航/充电',
+    trust_issue: '信任问题',
+    usability_issue: '使用困难',
+    discretion_issue: '隐私/噪音',
+  };
+  for (const p of uniquePosts) {
+    for (const pp of (p.painPoints || [])) {
+      const commentExcerpts = (p.comments || [])
+        .filter((c) => /\b(disappointed|waste|regret|broke|stopped|too loud|too big|too small|uncomfortable|battery|charging|overrated|confusing|noisy|can hear)\b/i.test(c.body))
+        .slice(0, 2)
+        .map((c) => c.body.slice(0, 200));
+      analysis.userPainPoints.push({
+        type: painLabels[pp] || pp,
+        postTitle: p.title,
+        postExcerpt: (p.content || '').slice(0, 200),
+        commentExcerpts,
+      });
+    }
+  }
+  analysis.userPainPoints = analysis.userPainPoints.slice(0, 40);
+
+  // Buying signals raw: actual user quotes showing purchase intent
+  const buyingLabels = {
+    purchase_mention: '已购',
+    considering: '考虑购买',
+    seeking_recommendation: '求推荐',
+    value_assessment: '值不值',
+    comparison_shopping: '对比选购',
+    price_sensitivity: '价格敏感',
+    gift_intent: '送礼意图',
+  };
+  for (const p of uniquePosts) {
+    for (const bs of (p.buyingSignals || [])) {
+      const commentExcerpts = (p.comments || [])
+        .filter((c) => /\b(buying|bought|purchase|recommend|which one|worth it|budget|under \$|gift)\b/i.test(c.body))
+        .slice(0, 2)
+        .map((c) => c.body.slice(0, 200));
+      analysis.buyingSignalsRaw.push({
+        type: buyingLabels[bs] || bs,
+        postTitle: p.title,
+        postExcerpt: (p.content || '').slice(0, 200),
+        commentExcerpts,
+      });
+    }
+  }
+  analysis.buyingSignalsRaw = analysis.buyingSignalsRaw.slice(0, 40);
+
+  // Brand mentions: which brands appear in discussions
+  const brandCounts = {};
+  for (const p of uniquePosts) {
+    for (const brand of (p.competitors || [])) {
+      brandCounts[brand] = (brandCounts[brand] || 0) + 1;
+      // Find comment context for this brand
+      const contextComments = (p.comments || [])
+        .filter((c) => new RegExp(`\\b${brand.replace(/\s+/g, '\\s+')}\\b`, 'i').test(c.body))
+        .slice(0, 2)
+        .map((c) => c.body.slice(0, 200));
+      if (contextComments.length > 0) {
+        if (!analysis.brandMentions.find((m) => m.brand === brand)) {
+          analysis.brandMentions.push({ brand, mentions: 0, context: [] });
+        }
+        const entry = analysis.brandMentions.find((m) => m.brand === brand);
+        entry.context.push(...contextComments);
+      }
+    }
+  }
+  analysis.brandMentions = analysis.brandMentions
+    .map((m) => ({ ...m, mentions: brandCounts[m.brand] || 0, context: m.context.slice(0, 5) }))
+    .sort((a, b) => b.mentions - a.mentions)
+    .slice(0, 15);
+
+  // Community insights: aggregate by subreddit
+  const subAgg = {};
+  for (const p of uniquePosts) {
+    const sub = p.subreddit;
+    if (!sub) continue;
+    if (!subAgg[sub]) subAgg[sub] = { subreddit: `r/${sub}`, postCount: 0, totalScore: 0, themes: [], sampleTitles: [] };
+    subAgg[sub].postCount++;
+    subAgg[sub].totalScore += (p.score || 0);
+    subAgg[sub].sampleTitles.push(p.title);
+  }
+  analysis.communityInsights = Object.values(subAgg)
+    .sort((a, b) => b.postCount - a.postCount)
+    .slice(0, 10)
+    .map((s) => ({
+      ...s,
+      avgScore: s.postCount > 0 ? Math.round(s.totalScore / s.postCount) : 0,
+      sampleTitles: s.sampleTitles.slice(0, 5),
+    }));
+
+  // Impulse evidence: map discovered impulses back to actual Reddit posts
+  if (impulses.length > 0) {
+    for (const imp of impulses.slice(0, 15)) {
+      const matchingPosts = uniquePosts.filter((p) => {
+        const text = [p.title, p.content, ...(p.comments || []).map((c) => c.body)].join(' ').toLowerCase();
+        return (imp.keywords || []).some((kw) => {
+          const tokens = kw.toLowerCase().split(/\s+/).filter((t) => t.length > 3);
+          return tokens.some((t) => text.includes(t));
+        });
+      });
+      if (matchingPosts.length > 0) {
+        analysis.impulseEvidence.push({
+          impulse: imp.impulse,
+          impulse_en: imp.impulse_en,
+          evidencePosts: matchingPosts.slice(0, 3).map((p) => ({
+            title: p.title,
+            excerpt: (p.content || '').slice(0, 200),
+            topComment: (p.comments || [])[0]?.body?.slice(0, 200) || '',
+          })),
+        });
+      }
+    }
+  }
+
+  return analysis;
+}
+
+function summarizeCommentThemes(comments) {
+  const themes = [];
+  const text = comments.map((c) => c.body).join(' ').toLowerCase();
+  if (/recommend|suggestion|try this/i.test(text)) themes.push('求推荐/分享经验');
+  if (/disappointed|waste|regret|return/i.test(text)) themes.push('负面体验');
+  if (/compare|versus|vs|alternative/i.test(text)) themes.push('对比讨论');
+  if (/budget|cheap|affordable|expensive/i.test(text)) themes.push('价格讨论');
+  if (/partner|wife|girlfriend|gift/i.test(text)) themes.push('关系/送礼');
+  if (/safe|danger|health|risk/i.test(text)) themes.push('安全顾虑');
+  if (/quiet|noise|discreet|hide/i.test(text)) themes.push('隐私顾虑');
+  if (/beginner|first time|new to/i.test(text)) themes.push('新手入门');
+  return themes;
+}
 
 function inferLiveScore(keyword, liveSignals) {
   const kwTokens = new Set(keyword.toLowerCase().split(/[^a-z0-9]+/).filter(Boolean));

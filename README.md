@@ -187,6 +187,16 @@ For every relevant post, ALL comments are fetched (top-level + one level of repl
 
 These signals are merged with title-level signals for scoring.
 
+### Qualitative Analysis
+The report doesn't just give you numbers. It includes a full qualitative breakdown:
+- **Top Posts** — Highest-scoring relevant posts with title, excerpt, top comments, signal labels
+- **Hot Discussions** — Most-commented threads with discussion theme tags (price talk, comparison, safety concerns, etc.)
+- **User Pain Points** — Actual quotes from Reddit showing real complaints, organized by type
+- **Buying Signals Raw** — Purchase intent quotes organized by type (considering, seeking recommendation, comparison shopping, etc.)
+- **Brand Mentions** — Which brands appear in discussions, with frequency and context quotes
+- **Community Insights** — Per-subreddit aggregation showing where the most relevant discussions happen
+- **Impulse Evidence** — Maps discovered search impulses back to actual Reddit posts as proof
+
 ### Dynamic Competitor Discovery
 Brand mentions are extracted from all post titles + comment bodies. New brands not in the hardcoded list are discovered automatically based on mention frequency (minimum 2 mentions to filter noise).
 
@@ -235,7 +245,7 @@ node cli.mjs [options]
   --sort <string>          Comma-separated sort modes: relevance,top,new (default: relevance,top)
   --no-comments            Skip reading top comments (faster but less signals)
   --output <dir>           Output directory (default: ./output)
-  --limit <n>              Max keywords to analyze (default: 30)
+  --limit <n>              Max keywords to analyze (default: 100)
   --iterations <n>         LLM research rounds (default: 3)
   --discover               Discover impulses from Reddit via LLM (requires --keywords as seed topic)
   --dry-run                Print results, no file output
@@ -383,6 +393,16 @@ Nichedigger 使用多通道管线最大化信号提取：
 
 这些信号与标题级信号合并用于评分。
 
+**定性分析**
+报告不只有数值。包含完整的定性分析：
+- **Top 帖子** — 最高评分相关帖子的标题、摘要、热门评论、信号标签
+- **热帖讨论** — 评论最多的帖子，附带讨论主题标签（价格讨论、对比讨论、安全顾虑等）
+- **用户痛点原文** — Reddit 真实吐槽，按类型归类
+- **购买信号原文** — 购买意图的真实引文，按类型归类（考虑购买、求推荐、对比选购等）
+- **品牌提及** — 哪些品牌出现在讨论中，频次 + 上下文原文
+- **社区洞察** — 各 subreddit 聚合，看哪里讨论最密集
+- **冲动证据** — 将发现的搜索冲动映射回实际 Reddit 帖子
+
 **动态竞品发现**
 从所有帖子标题 + 评论正文中提取品牌提及。不在硬编码列表中的新品牌会根据提及频率自动发现（最少 2 次提及以过滤噪声）。
 
@@ -499,7 +519,7 @@ node cli.mjs [选项]
   --sort <字符串>           逗号分隔排序模式: relevance,top,new（默认: relevance,top）
   --no-comments             不读评论（更快但信号更少）
   --output <目录>           输出目录（默认: ./output）
-  --limit <数字>            最大关键词数（默认: 30）
+  --limit <数字>            最大关键词数（默认: 100）
   --iterations <数字>       LLM研究轮数（默认: 3）
   --discover               从Reddit动态发现搜索冲动（需要LLM）
   --dry-run                 只打印结果，不写文件
