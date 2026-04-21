@@ -65,7 +65,12 @@ program
       if (rawPosts.length >= 5) {
         console.error(`[nichedigger] LLM analyzing discussions to discover search impulses...`);
         impulses = await discoverImpulses(rawPosts, seedTopic);
-        console.error(`[nichedigger] Discovered ${impulses.length} impulses`);
+        // Filter out short/generic impulses (< 10 Chinese chars)
+        impulses = impulses.filter((imp) => {
+          const cnChars = (imp.impulse || '').replace(/[^\u4e00-\u9fff]/g, '');
+          return cnChars.length >= 10;
+        });
+        console.error(`[nichedigger] Discovered ${impulses.length} impulses (after quality filter)`);
 
         // Step 3: Collect all keywords from impulses
         keywords = impulses.flatMap((imp) => imp.keywords || []);
@@ -274,28 +279,40 @@ program
       内容类型: i.contentFormat || '?',
     }));
     console.log(JSON.stringify(output, null, 2));
+
+    // 提示用户是否要写入品牌表
+    const p0p1Keywords = topOpportunities.filter((i) => i.priority === 'P0' || i.priority === 'P1');
+    if (p0p1Keywords.length > 0) {
+      console.error(`\n[nichedigger] === 挖掘完成 ===`);
+      console.error(`[nichedigger] 发现 ${p0p1Keywords.length} 个高优关键词 (P0/P1)`);
+      console.error(`[nichedigger] 是否要增量填入 nichedigger-${opts.brand} 品牌表？`);
+      console.error(`[nichedigger] 如需填入，请在对话中告知 Claude，将按以下格式写入：`);
+      console.error(`[nichedigger]   关键词 | 优先级 | 意图 | 漏斗 | 商业分 | 内容类型 | 搜索冲动`);
+      for (const kw of p0p1Keywords) {
+        const matchedImpulse = impulses.find((imp) => (imp.keywords || []).includes(kw.keyword));
+        console.error(`[nichedigger]   ${kw.keyword} | ${kw.priority} | ${kw.intentLabel} | ${kw.funnel} | ${kw.commercialScore} | ${kw.contentFormat} | ${matchedImpulse ? matchedImpulse.impulse : '-'}`);
+      }
+    }
   });
 
-// ── Qualitative analysis: full content breakdown from Reddit data ──
+// ── Qualitative analysis: full content breakdown from Reddit data (Chinese labels) ──
 function buildQualitativeAnalysis(liveSignals, impulses) {
   const analysis = {
-    topPosts: [],
-    hotDiscussions: [],
-    userPainPoints: [],
-    buyingSignalsRaw: [],
-    brandMentions: [],
-    communityInsights: [],
-    impulseEvidence: [],
+    热门帖子: [],
+    热门讨论: [],
+    用户痛点: [],
+    购买信号原文: [],
+    品牌提及: [],
+    社区洞察: [],
+    冲动证据: [],
   };
 
-  // Known off-topic subreddits that frequently appear in broad searches
   const OFF_TOPIC_SUBS = new Set([
     'epstein', 'politics', 'worldnews', 'nottheonion',
     'conspiracy', 'conservative', 'liberal', 'politicaldiscussion',
     'hfy', 'astralprojection', 'entertainment',
   ]);
 
-  // Collect all relevant posts across all signals
   const allPosts = [];
   for (const sig of liveSignals) {
     const reddit = sig.reddit;
@@ -303,9 +320,7 @@ function buildQualitativeAnalysis(liveSignals, impulses) {
     for (const item of (reddit.items || [])) {
       if ((item._relevance || 0) >= 0.5) {
         const subLower = (item.subreddit || '').toLowerCase();
-        // Skip posts from known off-topic communities
         if (OFF_TOPIC_SUBS.has(subLower)) continue;
-        // Additional relevance check for low-relevance posts
         const text = [item.title, item.content].filter(Boolean).join(' ').toLowerCase();
         const hasRelevantKeyword = /\b(vibrat|stimulat|pleasure|clitoral|g-spot|wand|suction|lovense|lelo|we-vibe|womanizer|satisfyer|dame|dildo|sex\s*toy|bullet|rabbit|orgasm|clit)\b/i.test(text);
         if ((item._relevance || 0) < 0.6 && !hasRelevantKeyword) continue;
@@ -314,7 +329,6 @@ function buildQualitativeAnalysis(liveSignals, impulses) {
     }
   }
 
-  // Deduplicate by title
   const seenTitles = new Set();
   const uniquePosts = allPosts.filter((p) => {
     const key = (p.title || '').toLowerCase().slice(0, 80);
@@ -323,40 +337,17 @@ function buildQualitativeAnalysis(liveSignals, impulses) {
     return true;
   });
 
-  // Top posts: highest-scoring relevant posts with full text
-  analysis.topPosts = uniquePosts
-    .sort((a, b) => (b.score || 0) - (a.score || 0))
-    .slice(0, 30)
-    .map((p) => ({
-      title: p.title,
-      subreddit: `r/${p.subreddit}`,
-      score: p.score,
-      comments: p.numComments,
-      excerpt: (p.content || '').slice(0, 300),
-      buyingSignals: p.buyingSignals || [],
-      painPoints: p.painPoints || [],
-      competitors: p.competitors || [],
-      topComments: (p.comments || []).slice(0, 5).map((c) => ({
-        excerpt: c.body.slice(0, 200),
-        score: c.score,
-      })),
-    }));
-
-  // Hot discussions: most-commented relevant posts
-  analysis.hotDiscussions = uniquePosts
-    .sort((a, b) => (b.numComments || 0) - (a.numComments || 0))
-    .slice(0, 20)
-    .map((p) => ({
-      title: p.title,
-      subreddit: `r/${p.subreddit}`,
-      comments: p.numComments,
-      score: p.score,
-      excerpt: (p.content || '').slice(0, 300),
-      topCommentThemes: summarizeCommentThemes(p.comments || []),
-    }));
-
-  // User pain points: collect actual pain point text from posts + comments
-  const painLabels = {
+  // Chinese labels for signal types
+  const 购买信号标签 = {
+    purchase_mention: '已购买',
+    considering: '考虑购买',
+    seeking_recommendation: '求推荐',
+    value_assessment: '值不值',
+    comparison_shopping: '对比选购',
+    price_sensitivity: '价格敏感',
+    gift_intent: '送礼意图',
+  };
+  const 痛点标签 = {
     buyer_remorse: '后悔/退货',
     quality_issue: '质量问题',
     fit_comfort: '尺寸/舒适度',
@@ -365,92 +356,116 @@ function buildQualitativeAnalysis(liveSignals, impulses) {
     usability_issue: '使用困难',
     discretion_issue: '隐私/噪音',
   };
+
+  // 热门帖子
+  analysis.热门帖子 = uniquePosts
+    .sort((a, b) => (b.score || 0) - (a.score || 0))
+    .slice(0, 30)
+    .map((p) => ({
+      标题: p.title,
+      社区: `r/${p.subreddit}`,
+      得分: p.score,
+      评论数: p.numComments,
+      内容摘要: (p.content || '').slice(0, 300),
+      购买信号: (p.buyingSignals || []).map((s) => 购买信号标签[s] || s),
+      痛点: (p.painPoints || []).map((s) => 痛点标签[s] || s),
+      提及品牌: p.competitors || [],
+      热门评论: (p.comments || []).slice(0, 5).map((c) => ({
+        原文: c.body.slice(0, 200),
+        得分: c.score,
+      })),
+    }));
+
+  // 热门讨论
+  analysis.热门讨论 = uniquePosts
+    .sort((a, b) => (b.numComments || 0) - (a.numComments || 0))
+    .slice(0, 20)
+    .map((p) => ({
+      标题: p.title,
+      社区: `r/${p.subreddit}`,
+      评论数: p.numComments,
+      得分: p.score,
+      内容摘要: (p.content || '').slice(0, 300),
+      讨论主题: summarizeCommentThemes(p.comments || []),
+    }));
+
+  // 用户痛点
   for (const p of uniquePosts) {
     for (const pp of (p.painPoints || [])) {
       const commentExcerpts = (p.comments || [])
         .filter((c) => /\b(disappointed|waste|regret|broke|stopped|too loud|too big|too small|uncomfortable|battery|charging|overrated|confusing|noisy|can hear)\b/i.test(c.body))
         .slice(0, 2)
         .map((c) => c.body.slice(0, 200));
-      analysis.userPainPoints.push({
-        type: painLabels[pp] || pp,
-        postTitle: p.title,
-        postExcerpt: (p.content || '').slice(0, 200),
-        commentExcerpts,
+      analysis.用户痛点.push({
+        类型: 痛点标签[pp] || pp,
+        帖子标题: p.title,
+        帖子摘要: (p.content || '').slice(0, 200),
+        评论原文: commentExcerpts,
       });
     }
   }
-  analysis.userPainPoints = analysis.userPainPoints.slice(0, 40);
+  analysis.用户痛点 = analysis.用户痛点.slice(0, 40);
 
-  // Buying signals raw: actual user quotes showing purchase intent
-  const buyingLabels = {
-    purchase_mention: '已购',
-    considering: '考虑购买',
-    seeking_recommendation: '求推荐',
-    value_assessment: '值不值',
-    comparison_shopping: '对比选购',
-    price_sensitivity: '价格敏感',
-    gift_intent: '送礼意图',
-  };
+  // 购买信号原文
   for (const p of uniquePosts) {
     for (const bs of (p.buyingSignals || [])) {
       const commentExcerpts = (p.comments || [])
         .filter((c) => /\b(buying|bought|purchase|recommend|which one|worth it|budget|under \$|gift)\b/i.test(c.body))
         .slice(0, 2)
         .map((c) => c.body.slice(0, 200));
-      analysis.buyingSignalsRaw.push({
-        type: buyingLabels[bs] || bs,
-        postTitle: p.title,
-        postExcerpt: (p.content || '').slice(0, 200),
-        commentExcerpts,
+      analysis.购买信号原文.push({
+        类型: 购买信号标签[bs] || bs,
+        帖子标题: p.title,
+        帖子摘要: (p.content || '').slice(0, 200),
+        评论原文: commentExcerpts,
       });
     }
   }
-  analysis.buyingSignalsRaw = analysis.buyingSignalsRaw.slice(0, 40);
+  analysis.购买信号原文 = analysis.购买信号原文.slice(0, 40);
 
-  // Brand mentions: which brands appear in discussions
+  // 品牌提及
   const brandCounts = {};
   for (const p of uniquePosts) {
     for (const brand of (p.competitors || [])) {
       brandCounts[brand] = (brandCounts[brand] || 0) + 1;
-      // Find comment context for this brand
       const contextComments = (p.comments || [])
         .filter((c) => new RegExp(`\\b${brand.replace(/\s+/g, '\\s+')}\\b`, 'i').test(c.body))
         .slice(0, 2)
         .map((c) => c.body.slice(0, 200));
       if (contextComments.length > 0) {
-        if (!analysis.brandMentions.find((m) => m.brand === brand)) {
-          analysis.brandMentions.push({ brand, mentions: 0, context: [] });
+        if (!analysis.品牌提及.find((m) => m.品牌 === brand)) {
+          analysis.品牌提及.push({ 品牌: brand, 提及次数: 0, 上下文: [] });
         }
-        const entry = analysis.brandMentions.find((m) => m.brand === brand);
-        entry.context.push(...contextComments);
+        const entry = analysis.品牌提及.find((m) => m.品牌 === brand);
+        entry.上下文.push(...contextComments);
       }
     }
   }
-  analysis.brandMentions = analysis.brandMentions
-    .map((m) => ({ ...m, mentions: brandCounts[m.brand] || 0, context: m.context.slice(0, 5) }))
-    .sort((a, b) => b.mentions - a.mentions)
+  analysis.品牌提及 = analysis.品牌提及
+    .map((m) => ({ ...m, 提及次数: brandCounts[m.品牌] || 0, 上下文: m.上下文.slice(0, 5) }))
+    .sort((a, b) => b.提及次数 - a.提及次数)
     .slice(0, 15);
 
-  // Community insights: aggregate by subreddit
+  // 社区洞察
   const subAgg = {};
   for (const p of uniquePosts) {
     const sub = p.subreddit;
     if (!sub) continue;
-    if (!subAgg[sub]) subAgg[sub] = { subreddit: `r/${sub}`, postCount: 0, totalScore: 0, themes: [], sampleTitles: [] };
-    subAgg[sub].postCount++;
-    subAgg[sub].totalScore += (p.score || 0);
-    subAgg[sub].sampleTitles.push(p.title);
+    if (!subAgg[sub]) subAgg[sub] = { 社区: `r/${sub}`, 帖子数: 0, 总得分: 0, 样本标题: [] };
+    subAgg[sub].帖子数++;
+    subAgg[sub].总得分 += (p.score || 0);
+    subAgg[sub].样本标题.push(p.title);
   }
-  analysis.communityInsights = Object.values(subAgg)
-    .sort((a, b) => b.postCount - a.postCount)
+  analysis.社区洞察 = Object.values(subAgg)
+    .sort((a, b) => b.帖子数 - a.帖子数)
     .slice(0, 10)
     .map((s) => ({
       ...s,
-      avgScore: s.postCount > 0 ? Math.round(s.totalScore / s.postCount) : 0,
-      sampleTitles: s.sampleTitles.slice(0, 5),
+      平均得分: s.帖子数 > 0 ? Math.round(s.总得分 / s.帖子数) : 0,
+      样本标题: s.样本标题.slice(0, 5),
     }));
 
-  // Impulse evidence: map discovered impulses back to actual Reddit posts
+  // 冲动证据
   if (impulses.length > 0) {
     for (const imp of impulses.slice(0, 15)) {
       const matchingPosts = uniquePosts.filter((p) => {
@@ -461,13 +476,13 @@ function buildQualitativeAnalysis(liveSignals, impulses) {
         });
       });
       if (matchingPosts.length > 0) {
-        analysis.impulseEvidence.push({
-          impulse: imp.impulse,
-          impulse_en: imp.impulse_en,
-          evidencePosts: matchingPosts.slice(0, 3).map((p) => ({
-            title: p.title,
-            excerpt: (p.content || '').slice(0, 200),
-            topComment: (p.comments || [])[0]?.body?.slice(0, 200) || '',
+        analysis.冲动证据.push({
+          冲动: imp.impulse,
+          english: imp.impulse_en,
+          证据帖子: matchingPosts.slice(0, 3).map((p) => ({
+            标题: p.title,
+            摘要: (p.content || '').slice(0, 200),
+            热门评论: (p.comments || [])[0]?.body?.slice(0, 200) || '',
           })),
         });
       }
