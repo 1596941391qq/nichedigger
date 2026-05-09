@@ -574,3 +574,26 @@ nichedigger/
 MIT License
 
 </div>
+
+
+## Usage Modes
+
+This project works in two complementary ways:
+
+### Standalone Web App (Node.js)
+
+removed 40 packages in 1s
+
+45 packages are looking for funding
+  run `npm fund` for details
+
+### Bundle Orchestration (ai-openclaw-skeletons)
+Windows PowerShell
+°æȨËùÓÐ (C) Microsoft Corporation¡£±£ÁôËùÓÐȨÀû¡£
+
+³¢ÊÔÐµĿçƽ̨ PowerShell https://aka.ms/pscore6
+
+(base) PS E:i-openclaw-skeletons-dev> 
+Chains 6 skills: seo-strategy → keyword-research → competitor-analysis → content-gap-analysis → serp-analysis → keyword-value-reviewer.
+
+See [bundle/README.md](bundle/README.md) for full details.
