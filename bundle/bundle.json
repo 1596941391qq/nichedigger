@@ -1,0 +1,21 @@
+{
+  "name": "nichedigger",
+  "version": "0.2.0",
+  "description": "关键词挖掘一键流水线 Bundle：seo-strategy + keyword-research + competitor-analysis + content-gap-analysis + serp-analysis + keyword-value-reviewer。",
+  "packs": [
+    "seo-core-pack",
+    "audit-core-pack"
+  ],
+  "skills": [
+    "seo-strategy",
+    "keyword-research",
+    "competitor-analysis",
+    "content-gap-analysis",
+    "serp-analysis",
+    "keyword-value-reviewer-v2"
+  ],
+  "entry": {
+    "id": "nichedigger-top200",
+    "script": "Bundles/nichedigger/cil/run-nichedigger.ps1"
+  }
+}
